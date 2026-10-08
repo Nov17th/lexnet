@@ -1,4 +1,4 @@
-# LexNet
+# LexNet: A Linked Open Data Approach to Trilingual Vocabulary Learning
 
 LexNet is a Linked Open Data resource for Vietnamese learners of English and Chinese. Instead of a word-to-word translation table, it is a network of shared concepts: English, Vietnamese and Chinese words point to the same language-independent concept, concepts are linked by semantic relations, and a learner layer adds proficiency levels, register and usage examples to each word sense. Chinese words are also broken down into characters and radicals.
 
