@@ -86,12 +86,12 @@ SELECT ?whole ?part WHERE {
   FILTER(LANG(?whole) = "en" && LANG(?part) = "en")
 }
 
-# --- 8) Polysemous words, with level and register of each sense (in Protégé the reasoner infers PolysemousEntry)
+# --- 8) Polysemous words, with level, register and usage example of each sense (in Protégé the reasoner infers PolysemousEntry)
 PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
 PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-SELECT ?word ?meaning ?level ?register WHERE {
+SELECT ?word ?meaning ?level ?register ?example WHERE {
   { SELECT ?e WHERE { ?e ontolex:sense ?x } GROUP BY ?e HAVING (COUNT(?x) >= 2) }   # count senses, as in the PolysemousEntry class
   ?e ontolex:canonicalForm/ontolex:writtenRep ?word ; ontolex:sense ?s .
   ?s ontolex:isLexicalizedSenseOf ?c .
@@ -100,6 +100,7 @@ SELECT ?word ?meaning ?level ?register WHERE {
   BIND(COALESCE(?definition, ?label) AS ?meaning)      # the definition tells apart senses with the same label
   OPTIONAL { ?s lexnet:level/skos:notation ?level }
   OPTIONAL { ?s lexnet:register/rdfs:label ?register . FILTER(LANG(?register) = "en") }
+  OPTIONAL { ?s lexnet:hasExample/rdfs:label ?example }
 } ORDER BY ?word ?meaning
 
 # --- 9) Confusable words (English and Chinese) and their type
