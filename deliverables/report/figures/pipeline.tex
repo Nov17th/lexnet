@@ -1,0 +1,40 @@
+% Data pipeline (TikZ), used in the data section.
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+    every node/.style={font=\sffamily\small},
+    pbox/.style={draw, rounded corners=2pt, align=center, minimum height=1.1cm, text width=2.8cm, fill=blue!8, draw=blue!50!black},
+    src/.style={draw, rounded corners=2pt, align=center, minimum height=0.8cm, text width=2.8cm, fill=black!6},
+    consumer/.style={draw, rounded corners=2pt, align=center, minimum height=0.8cm, text width=2.8cm, fill=green!8, draw=green!40!black},
+    ext/.style={draw, dashed, rounded corners=2pt, align=center, minimum height=0.8cm, text width=2.8cm, draw=black!60},
+    arr/.style={-{Stealth[length=2.2mm]}, thick, black!75},
+    lab/.style={font=\scriptsize, fill=white, inner sep=1pt},
+    node distance=0.6cm and 0.8cm,
+  ]
+  % main chain
+  \node[pbox] (sheet) {Shared spreadsheet\\{\scriptsize reviewed by the team}};
+  \node[pbox, right=of sheet] (csv) {{\ttfamily\footnotesize import\_sheet.py}\\{\ttfamily data/*.csv} {\scriptsize (3\,$\star$)}};
+  \node[pbox, right=of csv] (build) {{\ttfamily csv\_to\_ttl.py}\\{\scriptsize derive, validate}};
+  \node[pbox, right=of build] (ttl) {{\ttfamily lexnet-full.ttl}\\{\scriptsize RDF, 4\,$\star$ + links}};
+  % inputs
+  \node[src, above=of csv, xshift=1.8cm] (refs) {Oxford, HSK lists, CMUdict, Unihan, Make Me a Hanzi};
+  \node[ext, above=of sheet] (wd1) {Wikidata items, lexemes\\{\ttfamily\scriptsize lookup\_wikidata.py}};
+  % consumers
+  \node[consumer, right=1.1cm of ttl] (protege) {Protégé + HermiT};
+  \node[consumer, above=0.45cm of protege] (fuseki) {Fuseki SPARQL endpoint};
+  \node[consumer, below=0.45cm of protege] (check) {{\ttfamily check\_build.py}};
+  \node[ext, right=1.5cm of fuseki] (wd2) {Wikidata endpoint};
+  \node[pbox, above=0.6cm of fuseki, fill=black!3, draw=black!50] (web) {Web interface\\{\scriptsize learner, developer}};
+
+  \draw[arr] (sheet) -- (csv);
+  \draw[arr] (csv) -- (build);
+  \draw[arr] (build) -- (ttl);
+  \draw[arr] (refs) -- node[lab, right, pos=0.45] {derive, check} (build);
+  \draw[arr] (refs) -- node[lab, left, pos=0.45] {pre-fill} (sheet);
+  \draw[arr] (wd1) -- node[lab, right] {link suggestions} (sheet);
+  \draw[arr] (ttl.east) -- (fuseki.west);
+  \draw[arr] (ttl.east) -- (protege.west);
+  \draw[arr] (ttl.east) -- (check.west);
+  \draw[arr, dashed] (fuseki) -- node[lab, above] {federation} (wd2);
+  \draw[arr] (web) -- node[lab, right] {SPARQL / HTTP} (fuseki);
+\end{tikzpicture}%
+}

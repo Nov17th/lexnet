@@ -1,0 +1,251 @@
+# LexNet demo queries. Run them one at a time in Fuseki (query tab); each declares its own prefixes.
+# 14-16 are federated with Wikidata and need internet. Labels are in English, as in the app;
+# change "en" to "vi" in the label filters to see Vietnamese.
+
+# --- 1) Translation: the words for "cat" in the three languages, with the level of each sense
+PREFIX concept: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#concept/>
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?lang ?word ?level WHERE {
+  ?e ontolex:sense ?s ; ontolex:canonicalForm/ontolex:writtenRep ?word .
+  ?s ontolex:isLexicalizedSenseOf concept:cat .
+  OPTIONAL { ?s lexnet:level/skos:prefLabel ?level . FILTER(LANG(?level) = "en") }
+  BIND(LANG(?word) AS ?lang)
+} ORDER BY ?lang
+
+# --- 2) Synonyms within one language, with the register of each sense
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?meaning ?lang ?word1 ?register1 ?word2 ?register2 WHERE {
+  ?e1 ontolex:sense ?s1 . ?s1 ontolex:isLexicalizedSenseOf ?c .
+  ?e2 ontolex:sense ?s2 . ?s2 ontolex:isLexicalizedSenseOf ?c .
+  ?e1 ontolex:canonicalForm/ontolex:writtenRep ?word1 .
+  ?e2 ontolex:canonicalForm/ontolex:writtenRep ?word2 .
+  FILTER(LANG(?word1) = LANG(?word2) && STR(?word1) < STR(?word2))
+  ?c skos:prefLabel ?meaning . FILTER(LANG(?meaning) = "en")
+  OPTIONAL { ?s1 lexnet:register/rdfs:label ?register1 . FILTER(LANG(?register1) = "en") }
+  OPTIONAL { ?s2 lexnet:register/rdfs:label ?register2 . FILTER(LANG(?register2) = "en") }
+  BIND(LANG(?word1) AS ?lang)
+} ORDER BY ?meaning ?lang
+
+# --- 3) Words that share a concept with 猫, via the path evokes/^evokes
+#     (the sharesConceptWith property chain of the ontology, without a reasoner)
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+SELECT DISTINCT ?word WHERE {
+  ?e1 ontolex:canonicalForm/ontolex:writtenRep "猫"@zh .
+  ?e1 ontolex:evokes/^ontolex:evokes ?e2 .
+  FILTER(?e1 != ?e2)
+  ?e2 ontolex:canonicalForm/ontolex:writtenRep ?word .
+}
+
+# --- 4) All concepts below "animal", with their direct parent
+PREFIX concept: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#concept/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?concept ?parent WHERE {
+  ?c skos:broader+ concept:animal ; skos:prefLabel ?concept ; skos:broader/skos:prefLabel ?parent .
+  FILTER(LANG(?concept) = "en" && LANG(?parent) = "en")
+} ORDER BY ?parent ?concept
+
+# --- 5) Chinese animal words up to HSK 2 whose English equivalent is at CEFR A1
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX topic: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#topic/>
+SELECT ?word ?pinyin ?hsk ?english ?cefr WHERE {
+  ?c lexnet:inDomain topic:animal .
+  ?zs ontolex:isLexicalizedSenseOf ?c ; lexnet:level ?zl .
+  ?zl skos:inScheme lexnet:HSK ; lexnet:rank ?rank ; skos:notation ?hsk .
+  FILTER(?rank <= 2)
+  ?ze ontolex:sense ?zs ; ontolex:canonicalForm ?zf .
+  ?zf ontolex:writtenRep ?word ; ontolex:phoneticRep ?pinyin .
+  ?es ontolex:isLexicalizedSenseOf ?c ; lexnet:level ?el .
+  ?el skos:inScheme lexnet:CEFR ; skos:notation ?cefr .
+  FILTER(STR(?cefr) = "A1")
+  ?ee ontolex:sense ?es ; ontolex:canonicalForm/ontolex:writtenRep ?english .
+} ORDER BY ?hsk ?word
+
+# --- 6) Antonyms: the data may state one direction only, so read both (antonym|^antonym)
+#     and keep each pair once
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?a ?b WHERE {
+  { SELECT DISTINCT ?x ?y WHERE { ?x lexnet:antonym|^lexnet:antonym ?y . FILTER(STR(?x) < STR(?y)) } }
+  ?x skos:prefLabel ?a . ?y skos:prefLabel ?b .
+  FILTER(LANG(?a) = "en" && LANG(?b) = "en")
+} ORDER BY ?a
+
+# --- 7) Parts (meronymy)
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?whole ?part WHERE {
+  ?w lexnet:partMeronym ?p .
+  ?w skos:prefLabel ?whole . ?p skos:prefLabel ?part .
+  FILTER(LANG(?whole) = "en" && LANG(?part) = "en")
+}
+
+# --- 8) Polysemous words, with level and register of each sense (in Protégé the reasoner infers PolysemousEntry)
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?word ?meaning ?level ?register WHERE {
+  { SELECT ?e WHERE { ?e ontolex:sense ?x } GROUP BY ?e HAVING (COUNT(?x) >= 2) }   # count senses, as in the PolysemousEntry class
+  ?e ontolex:canonicalForm/ontolex:writtenRep ?word ; ontolex:sense ?s .
+  ?s ontolex:isLexicalizedSenseOf ?c .
+  ?c skos:prefLabel ?label . FILTER(LANG(?label) = "en")
+  OPTIONAL { ?c skos:definition ?definition }
+  BIND(COALESCE(?definition, ?label) AS ?meaning)      # the definition tells apart senses with the same label
+  OPTIONAL { ?s lexnet:level/skos:notation ?level }
+  OPTIONAL { ?s lexnet:register/rdfs:label ?register . FILTER(LANG(?register) = "en") }
+} ORDER BY ?word ?meaning
+
+# --- 9) Confusable words (English and Chinese) and their type
+#     glyph and meaning pairs are hand-picked; sound pairs are derived by csv_to_ttl.py (see 10)
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?lang ?word1 ?word2 ?type WHERE {
+  VALUES ?p { lexnet:similarGlyph lexnet:similarSound lexnet:similarMeaning }
+  ?e1 ?p ?e2 .
+  ?p rdfs:label ?type . FILTER(LANG(?type) = "en")
+  ?e1 ontolex:canonicalForm/ontolex:writtenRep ?word1 .
+  ?e2 ontolex:canonicalForm/ontolex:writtenRep ?word2 .
+  BIND(LANG(?word1) AS ?lang)
+} ORDER BY ?lang ?type ?word1
+
+# --- 10) Homophones: words of one language with the same pronunciation (English IPA, Chinese pinyin with tones)
+#     The rule csv_to_ttl.py uses for lexnet:similarSound; pairs that differ only in tone (书/树) do not count.
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+SELECT ?lang ?sound (GROUP_CONCAT(DISTINCT STR(?word); SEPARATOR=", ") AS ?words) WHERE {
+  ?f ontolex:phoneticRep ?reading ; ontolex:writtenRep ?word .
+  BIND(LANG(?word) AS ?lang)
+  BIND(REPLACE(LCASE(STR(?reading)), "[ '’]", "") AS ?sound)
+} GROUP BY ?lang ?sound HAVING (COUNT(DISTINCT ?word) > 1) ORDER BY ?lang ?sound
+
+# --- 11) Words with a character under radical 犬(犭) or 水(氵): do they name mammals?
+PREFIX concept: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#concept/>
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX radical: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#radical/>
+SELECT ?radical ?word ?meaning ?isMammal WHERE {
+  VALUES ?r { radical:94 radical:85 }
+  ?r rdfs:label ?radicalChar . OPTIONAL { ?r lexnet:variantForm ?variant }
+  BIND(IF(BOUND(?variant), CONCAT(STR(?radicalChar), " (", ?variant, ")"), STR(?radicalChar)) AS ?radical)
+  ?ch lexnet:hasRadical ?r .
+  ?f lexnet:hasCharacter ?ch ; ontolex:writtenRep ?word .
+  ?e ontolex:canonicalForm ?f ; ontolex:evokes ?c .
+  ?c skos:prefLabel ?meaning . FILTER(LANG(?meaning) = "en")
+  BIND(EXISTS { ?c skos:broader* concept:mammal } AS ?isMammal)
+} ORDER BY ?radical ?word
+
+# --- 12) Characters with several readings (多音字) and the words that contain them
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?char (GROUP_CONCAT(DISTINCT ?reading; SEPARATOR=" / ") AS ?readings)
+       (GROUP_CONCAT(DISTINCT CONCAT(STR(?word), " ", STR(?py)); SEPARATOR=", ") AS ?usedIn) WHERE {
+  ?ch a lexnet:HanCharacter ; rdfs:label ?char ; lexnet:reading ?reading .
+  ?f lexnet:hasCharacter ?ch ; ontolex:writtenRep ?word ; ontolex:phoneticRep ?py .
+} GROUP BY ?char HAVING (COUNT(DISTINCT ?reading) > 1) ORDER BY ?char
+
+# --- 13) The radical of each character of a word, in order (睡觉)
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?position ?char ?commonReading ?radical ?radicalMeaning WHERE {
+  ?f ontolex:writtenRep "睡觉"@zh ; lexnet:hasCharacter ?c .
+  ?c rdfs:label ?char ; lexnet:commonReading ?commonReading ; lexnet:hasRadical ?r .
+  ?r rdfs:label ?radical . OPTIONAL { ?r skos:definition ?radicalMeaning }
+  BIND(STRLEN(STRBEFORE("睡觉", STR(?char))) + 1 AS ?position)
+} ORDER BY ?position
+
+# --- 14) Federated: labels of the concept "cat" on Wikidata in several languages (via skos:exactMatch)
+PREFIX concept: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#concept/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?lang ?label WHERE {
+  concept:cat skos:exactMatch ?q .
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?q rdfs:label ?label .
+    BIND(LANG(?label) AS ?lang)
+    FILTER(?lang IN ("en","vi","zh","fr","ko","es","de"))
+  }
+}
+
+# --- 15) Federated: our English IPA (CMUdict) next to the IPA and audio of the Wikidata lexeme
+#     (via owl:sameAs on the word)
+PREFIX concept: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#concept/>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT ?word ?ourIpa ?ipa ?audio WHERE {
+  VALUES ?c { concept:cat concept:dog concept:eat concept:water }
+  ?e ontolex:evokes ?c ; ontolex:canonicalForm ?form ; owl:sameAs ?lex .
+  ?form ontolex:writtenRep ?word . FILTER(LANG(?word) = "en")
+  OPTIONAL { ?form ontolex:phoneticRep ?ourIpa }
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?lex wikibase:lemma ?lemma ; ontolex:lexicalForm ?f .
+    ?f ontolex:representation ?rep . FILTER(STR(?rep) = STR(?lemma))
+    OPTIONAL { ?f wdt:P898 ?ipa }
+    OPTIONAL { ?f wdt:P443 ?audio }
+  }
+}
+
+# --- 16) Federated: our pinyin compared with the pinyin of the Wikidata lexeme
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX topic: <https://nov17th.github.io/lexnet/build/lexnet-full.ttl#topic/>
+SELECT ?word ?ourPinyin ?pinyinWikidata ?match WHERE {
+  ?e ontolex:evokes/lexnet:inDomain topic:animal ;
+     ontolex:canonicalForm ?f ; owl:sameAs ?lex .
+  ?f ontolex:writtenRep ?word ; ontolex:phoneticRep ?ourPinyin .
+  FILTER(LANG(?word) = "zh")
+  SERVICE <https://query.wikidata.org/sparql> {
+    ?lex ontolex:lexicalForm ?lf . ?lf wdt:P1721 ?pinyinWikidata .
+  }
+  BIND(REPLACE(STR(?ourPinyin), "[ ']", "") = REPLACE(STR(?pinyinWikidata), "[ ']", "") AS ?match)
+}
+
+# --- 17) Same spelling, different part of speech: "năm" (year / five), drink (noun / verb)
+#     A word is (language, spelling, part of speech), so these are two words each: not polysemy (query 8),
+#     and not homophones either, since similarSound only links different spellings (query 10).
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX lexinfo: <http://www.lexinfo.net/ontology/3.0/lexinfo#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?word (GROUP_CONCAT(DISTINCT CONCAT(STR(?posLabel), ": ", STR(?meaning)); SEPARATOR=" · ") AS ?posAndMeanings) WHERE {
+  ?e ontolex:canonicalForm/ontolex:writtenRep ?word ; lexinfo:partOfSpeech ?pos ; ontolex:evokes ?c .
+  FILTER EXISTS { ?e2 ontolex:canonicalForm/ontolex:writtenRep ?word ; lexinfo:partOfSpeech ?pos2 . FILTER(?pos2 != ?pos) }
+  ?pos rdfs:label ?posLabel . FILTER(LANG(?posLabel) = "en")
+  ?c skos:prefLabel ?label . FILTER(LANG(?label) = "en")
+  OPTIONAL { ?c skos:definition ?definition }
+  BIND(COALESCE(?definition, ?label) AS ?meaning)
+} GROUP BY ?word ORDER BY ?word
+
+# --- 18) Look-alike Han characters, also inside compounds: 白 (白色) / 百, 午 (午饭) / 牛
+#     similarCharacter links two characters once; the words that contain them are found via lexnet:hasCharacter.
+#     Read both directions (|^) and keep each pair once.
+PREFIX lexnet: <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#>
+PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?char1 (GROUP_CONCAT(DISTINCT ?x1; SEPARATOR=", ") AS ?wordsWithChar1)
+       ?char2 (GROUP_CONCAT(DISTINCT ?x2; SEPARATOR=", ") AS ?wordsWithChar2) WHERE {
+  ?a lexnet:similarCharacter|^lexnet:similarCharacter ?b .
+  ?a rdfs:label ?char1 . ?b rdfs:label ?char2 . FILTER(STR(?char1) < STR(?char2))
+  ?e1 ontolex:canonicalForm ?f1 ; ontolex:evokes/skos:prefLabel ?n1 .
+  ?f1 lexnet:hasCharacter ?a ; ontolex:writtenRep ?w1 . FILTER(LANG(?n1) = "en")
+  ?e2 ontolex:canonicalForm ?f2 ; ontolex:evokes/skos:prefLabel ?n2 .
+  ?f2 lexnet:hasCharacter ?b ; ontolex:writtenRep ?w2 . FILTER(LANG(?n2) = "en")
+  BIND(CONCAT(STR(?w1), " (", STR(?n1), ")") AS ?x1)
+  BIND(CONCAT(STR(?w2), " (", STR(?n2), ")") AS ?x2)
+} GROUP BY ?char1 ?char2 ORDER BY ?char1 ?char2

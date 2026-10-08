@@ -1,0 +1,247 @@
+# LexNet ontology (TBox) and its controlled vocabularies (levels, registers).
+# scripts/csv_to_ttl.py copies this file to the top of build/lexnet-full.ttl and appends the data,
+# so renaming a class or property used by the script means changing the script too.
+
+@prefix lexnet:   <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#> .
+@prefix level:    <https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#level/> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix ontolex:  <http://www.w3.org/ns/lemon/ontolex#> .
+@prefix lexinfo:  <http://www.lexinfo.net/ontology/3.0/lexinfo#> .
+@prefix dct:      <http://purl.org/dc/terms/> .
+
+<https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl> a owl:Ontology ;
+    rdfs:label "LexNet — Multilingual Learner's Semantic Network"@en , "LexNet — Mạng ngữ nghĩa đa ngôn ngữ cho người học"@vi ;
+    rdfs:comment "A multilingual (EN/VI/ZH) lexical knowledge graph for Vietnamese learners of English and Chinese: shared concepts, words, word senses, and Han characters."@en ;
+    dct:source <https://www.wikidata.org/> , <https://www.unicode.org/charts/unihan.html> ;
+    dct:license <https://creativecommons.org/licenses/by/4.0/> ;      # open licence: first star
+    owl:versionInfo "1.0" .
+
+# 0. Reused terms, declared exactly as in OntoLex, SKOS, LexInfo and DCMI.
+# They are not imported, to keep the file small. Merging LexNet with the original OntoLex, SKOS and
+# LexInfo files adds no OWL 2 DL violation (the remaining ones are in those files) and stays consistent.
+# OWL 2 DL needs every entity declared.
+ontolex:LexicalEntry   a owl:Class ; rdfs:label "Lexical entry"@en , "Từ"@vi .
+ontolex:LexicalSense   a owl:Class ; rdfs:label "Lexical sense"@en , "Nghĩa của từ"@vi .
+ontolex:Form           a owl:Class ; rdfs:label "Form"@en , "Dạng viết"@vi .
+ontolex:LexicalConcept a owl:Class ; rdfs:subClassOf skos:Concept ;
+    rdfs:label "Lexical concept"@en , "Khái niệm từ vựng"@vi .
+
+ontolex:evokes a owl:ObjectProperty ;
+    rdfs:domain ontolex:LexicalEntry ; rdfs:range ontolex:LexicalConcept ;
+    owl:propertyChainAxiom ( ontolex:sense ontolex:isLexicalizedSenseOf ) ;   # as in OntoLex
+    rdfs:label "evokes"@en , "gợi khái niệm"@vi .
+ontolex:sense a owl:ObjectProperty, owl:InverseFunctionalProperty ;           # a sense belongs to exactly one entry
+    owl:inverseOf ontolex:isSenseOf ;
+    rdfs:domain ontolex:LexicalEntry ; rdfs:range ontolex:LexicalSense ;
+    rdfs:label "sense"@en , "có nghĩa"@vi .
+ontolex:isSenseOf a owl:ObjectProperty ; rdfs:label "is sense of"@en , "là nghĩa của"@vi .
+ontolex:isLexicalizedSenseOf a owl:ObjectProperty ;
+    rdfs:domain ontolex:LexicalSense ; rdfs:range ontolex:LexicalConcept ;
+    rdfs:label "is lexicalized sense of"@en , "diễn đạt khái niệm"@vi .
+ontolex:canonicalForm a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain ontolex:LexicalEntry ; rdfs:range ontolex:Form ;
+    rdfs:label "canonical form"@en , "dạng viết chuẩn"@vi .
+ontolex:writtenRep  a owl:DatatypeProperty ; rdfs:domain ontolex:Form ; rdfs:label "written representation"@en , "chữ viết"@vi .
+ontolex:phoneticRep a owl:DatatypeProperty ; rdfs:domain ontolex:Form ; rdfs:label "phonetic representation"@en , "phiên âm"@vi .
+
+skos:Concept       a owl:Class ; rdfs:label "SKOS concept"@en , "Khái niệm SKOS"@vi .
+skos:ConceptScheme a owl:Class ; rdfs:label "Concept scheme"@en , "Hệ phân loại"@vi .
+skos:broader       a owl:ObjectProperty ; rdfs:label "broader"@en , "rộng hơn"@vi .
+skos:inScheme      a owl:ObjectProperty ; rdfs:label "in scheme"@en , "thuộc hệ phân loại"@vi .
+skos:exactMatch    a owl:ObjectProperty ; rdfs:label "exact match"@en , "khớp chính xác"@vi .
+skos:closeMatch    a owl:ObjectProperty ; rdfs:label "close match"@en , "khớp gần đúng"@vi .
+skos:prefLabel     a owl:AnnotationProperty .
+skos:definition    a owl:AnnotationProperty .
+skos:notation      a owl:DatatypeProperty ; rdfs:label "notation"@en , "ký hiệu"@vi .   # declared as DatatypeProperty in SKOS
+dct:source         a owl:AnnotationProperty .
+dct:license        a owl:AnnotationProperty .
+
+lexinfo:PartOfSpeech a owl:Class ; rdfs:label "Part of speech"@en , "Từ loại"@vi .
+lexinfo:partOfSpeech a owl:ObjectProperty ; rdfs:range lexinfo:PartOfSpeech ; rdfs:label "part of speech"@en , "từ loại"@vi .
+lexinfo:noun      a lexinfo:PartOfSpeech ; rdfs:label "noun"@en , "danh từ"@vi .
+lexinfo:verb      a lexinfo:PartOfSpeech ; rdfs:label "verb"@en , "động từ"@vi .
+lexinfo:adjective a lexinfo:PartOfSpeech ; rdfs:label "adjective"@en , "tính từ"@vi .
+lexinfo:numeral   a lexinfo:PartOfSpeech ; rdfs:label "numeral"@en , "số từ"@vi .
+
+# 1. Core: concepts, entries (words), senses, forms
+lexnet:Concept a owl:Class ;
+    rdfs:subClassOf ontolex:LexicalConcept ;
+    rdfs:label "Concept"@en , "Khái niệm"@vi ;
+    rdfs:comment "A language-independent meaning shared by words of all three languages."@en .
+
+# All LexNet node types are pairwise disjoint, so data that points to the wrong type (a level pointing
+# to a concept, say) makes the reasoner report an inconsistency instead of quietly inferring a new type.
+[] a owl:AllDisjointClasses ;
+   owl:members ( lexnet:Concept ontolex:LexicalEntry ontolex:LexicalSense ontolex:Form
+                 lexnet:HanCharacter lexnet:Radical lexnet:ThematicDomain
+                 lexnet:ProficiencyLevel lexnet:Register lexnet:UsageExample ) .
+
+# Stricter than OntoLex, and compatible with it:
+#  - each entry has exactly 1 canonical form (OntoLex: at most 1)
+#  - each sense lexicalizes exactly 1 concept (OntoLex: no limit)
+ontolex:LexicalEntry rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty ontolex:canonicalForm ; owl:cardinality 1 ] .
+ontolex:LexicalSense rdfs:subClassOf
+    [ a owl:Restriction ; owl:onProperty ontolex:isLexicalizedSenseOf ; owl:cardinality 1 ] .
+
+# 2. Topics (a SKOS concept scheme)
+lexnet:ThematicDomain a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Topic"@en , "Chủ đề"@vi .
+lexnet:Topics a skos:ConceptScheme ; rdfs:label "LexNet topics"@en , "Chủ đề LexNet"@vi .
+lexnet:inDomain a owl:ObjectProperty ;
+    rdfs:domain lexnet:Concept ; rdfs:range lexnet:ThematicDomain ;
+    rdfs:label "in topic"@en , "thuộc chủ đề"@vi .
+
+# 3. Relations between concepts (is-a is skos:broader)
+lexnet:antonym a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain lexnet:Concept ; rdfs:range lexnet:Concept ;
+    rdfs:label "antonym"@en , "trái nghĩa"@vi .
+lexnet:partMeronym a owl:ObjectProperty ;
+    owl:inverseOf lexnet:partHolonym ;
+    rdfs:domain lexnet:Concept ; rdfs:range lexnet:Concept ;
+    rdfs:label "has part"@en , "có bộ phận"@vi .
+lexnet:partHolonym a owl:ObjectProperty ;
+    rdfs:label "part of"@en , "là bộ phận của"@vi .
+
+# 4. Inference: a defined class and a property chain
+# A polysemous entry has 2 or more senses ("bank", "cool"). The count is on ontolex:sense, not on
+# ontolex:evokes: evokes is defined by a property chain (as in OntoLex), and OWL 2 DL allows no
+# cardinality restriction on such a property. The senses are known to differ because each one
+# lexicalizes exactly 1 concept and the concepts are declared different.
+lexnet:PolysemousEntry a owl:Class ;
+    rdfs:label "Polysemous entry"@en , "Từ đa nghĩa"@vi ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf ( ontolex:LexicalEntry
+        [ a owl:Restriction ; owl:onProperty ontolex:sense ;
+          owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ; owl:onClass ontolex:LexicalSense ] ) ] .
+
+# Two entries that evoke the same concept share it: synonyms in one language, translations across
+# languages. Same pattern as hasSibling = hasParent ∘ hasParent⁻¹.
+lexnet:sharesConceptWith a owl:ObjectProperty ;
+    rdfs:label "shares a concept with"@en , "chia sẻ nghĩa với"@vi ;
+    owl:propertyChainAxiom ( ontolex:evokes [ owl:inverseOf ontolex:evokes ] ) .
+
+# 5. Learner layer: proficiency levels (SKOS), register, usage examples
+lexnet:ProficiencyLevel a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Proficiency level"@en , "Cấp độ"@vi .
+# Levels belong to the sense: "bank" as a financial institution is A1, "bank" of a river is B1.
+lexnet:level a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain ontolex:LexicalSense ; rdfs:range lexnet:ProficiencyLevel ;
+    rdfs:label "proficiency level"@en , "cấp độ"@vi ;
+    rdfs:comment "Level of knowing a word in one particular sense. Word-level lists (Oxford 3000, HSK) are recorded on the word's core sense; the level of a whole word is the lowest level among its senses."@en .
+lexnet:rank a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain lexnet:ProficiencyLevel ; rdfs:range xsd:integer ;
+    rdfs:label "rank"@en , "thứ hạng"@vi ;
+    rdfs:comment "Order of a level inside its framework (1 = easiest), for range queries."@en .
+
+lexnet:CEFR a skos:ConceptScheme ;
+    rdfs:label "CEFR"@en , "Khung CEFR"@vi ;
+    rdfs:comment "Common European Framework of Reference; English levels taken from the Oxford 3000."@en .
+lexnet:HSK a skos:ConceptScheme ;
+    rdfs:label "HSK 3.0 (2025 syllabus)"@en , "HSK 3.0 (chuẩn 2025)"@vi ;
+    rdfs:comment "Chinese proficiency levels of the HSK 3.0 syllabus (Nov 2025); levels 7–9 form one shared band."@en .
+
+level:CEFR_A1 a lexnet:ProficiencyLevel ; skos:inScheme lexnet:CEFR ; skos:notation "A1" ; skos:prefLabel "CEFR A1"@en , "CEFR A1"@vi ; lexnet:rank 1 .
+level:CEFR_A2 a lexnet:ProficiencyLevel ; skos:inScheme lexnet:CEFR ; skos:notation "A2" ; skos:prefLabel "CEFR A2"@en , "CEFR A2"@vi ; lexnet:rank 2 .
+level:CEFR_B1 a lexnet:ProficiencyLevel ; skos:inScheme lexnet:CEFR ; skos:notation "B1" ; skos:prefLabel "CEFR B1"@en , "CEFR B1"@vi ; lexnet:rank 3 .
+level:CEFR_B2 a lexnet:ProficiencyLevel ; skos:inScheme lexnet:CEFR ; skos:notation "B2" ; skos:prefLabel "CEFR B2"@en , "CEFR B2"@vi ; lexnet:rank 4 .
+level:CEFR_C1 a lexnet:ProficiencyLevel ; skos:inScheme lexnet:CEFR ; skos:notation "C1" ; skos:prefLabel "CEFR C1"@en , "CEFR C1"@vi ; lexnet:rank 5 .
+level:CEFR_C2 a lexnet:ProficiencyLevel ; skos:inScheme lexnet:CEFR ; skos:notation "C2" ; skos:prefLabel "CEFR C2"@en , "CEFR C2"@vi ; lexnet:rank 6 .
+level:HSK_1   a lexnet:ProficiencyLevel ; skos:inScheme lexnet:HSK ; skos:notation "1" ; skos:prefLabel "HSK 1"@en , "HSK 1"@vi ; lexnet:rank 1 .
+level:HSK_2   a lexnet:ProficiencyLevel ; skos:inScheme lexnet:HSK ; skos:notation "2" ; skos:prefLabel "HSK 2"@en , "HSK 2"@vi ; lexnet:rank 2 .
+level:HSK_3   a lexnet:ProficiencyLevel ; skos:inScheme lexnet:HSK ; skos:notation "3" ; skos:prefLabel "HSK 3"@en , "HSK 3"@vi ; lexnet:rank 3 .
+level:HSK_4   a lexnet:ProficiencyLevel ; skos:inScheme lexnet:HSK ; skos:notation "4" ; skos:prefLabel "HSK 4"@en , "HSK 4"@vi ; lexnet:rank 4 .
+level:HSK_5   a lexnet:ProficiencyLevel ; skos:inScheme lexnet:HSK ; skos:notation "5" ; skos:prefLabel "HSK 5"@en , "HSK 5"@vi ; lexnet:rank 5 .
+level:HSK_6   a lexnet:ProficiencyLevel ; skos:inScheme lexnet:HSK ; skos:notation "6" ; skos:prefLabel "HSK 6"@en , "HSK 6"@vi ; lexnet:rank 6 .
+level:HSK_7-9 a lexnet:ProficiencyLevel ; skos:inScheme lexnet:HSK ; skos:notation "7-9" ; skos:prefLabel "HSK 7–9"@en , "HSK 7–9"@vi ; lexnet:rank 7 .
+
+# Level names are international, so the @vi label repeats them (the app needs en and vi labels).
+# OWL has no unique name assumption: the levels are declared different so the functional "level" catches errors.
+[] a owl:AllDifferent ; owl:distinctMembers (
+    level:CEFR_A1 level:CEFR_A2 level:CEFR_B1 level:CEFR_B2 level:CEFR_C1 level:CEFR_C2
+    level:HSK_1 level:HSK_2 level:HSK_3 level:HSK_4 level:HSK_5 level:HSK_6 level:HSK_7-9 ) .
+
+# Register belongs to the sense, since it can change with the meaning.
+lexnet:Register a owl:Class ; rdfs:label "Register"@en , "Ngữ vực"@vi .
+lexnet:formal   a lexnet:Register ; rdfs:label "formal"@en , "trang trọng"@vi .
+lexnet:literary a lexnet:Register ; rdfs:label "literary"@en , "văn viết"@vi .
+lexnet:informal a lexnet:Register ; rdfs:label "informal"@en , "thân mật"@vi .
+lexnet:polite   a lexnet:Register ; rdfs:label "polite"@en , "lịch sự"@vi .
+[] a owl:AllDifferent ; owl:distinctMembers ( lexnet:formal lexnet:literary lexnet:informal lexnet:polite ) .
+lexnet:register a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain ontolex:LexicalSense ; rdfs:range lexnet:Register ;
+    rdfs:label "register"@en , "ngữ vực"@vi .
+
+# Usage examples belong to the sense, so each example shows one meaning.
+lexnet:UsageExample a owl:Class ; rdfs:label "Usage example"@en , "Câu ví dụ"@vi .
+lexnet:hasExample a owl:ObjectProperty ;
+    rdfs:domain ontolex:LexicalSense ; rdfs:range lexnet:UsageExample ;
+    rdfs:label "has example"@en , "có ví dụ"@vi .
+
+# 6. Confusable words: one parent property and three subproperties
+#  - similarGlyph, similarMeaning: hand-picked pairs (data/lexnet-confusables.csv), English and Chinese.
+#    Look-alike Han characters are linked as characters instead (similarCharacter, section 8).
+#  - similarSound is not entered by hand: csv_to_ttl.py links two words of one language with the same
+#    phoneticRep (IPA for English, pinyin with tones for Chinese; 书 shū / 树 shù do not count).
+#    OWL 2 DL cannot compare literal values of two individuals, so the rule runs at build time.
+lexnet:confusableWith a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain ontolex:LexicalEntry ; rdfs:range ontolex:LexicalEntry ;
+    rdfs:label "confusable with"@en , "dễ nhầm với"@vi .
+lexnet:similarGlyph a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:subPropertyOf lexnet:confusableWith ;
+    rdfs:label "similar written form"@en , "mặt chữ trông giống"@vi ;
+    rdfs:comment "Two words that look alike: Chinese words written with look-alike characters (天/大) or English look-alike spellings (desert/dessert). Look-alike characters inside compounds are linked at character level with lexnet:similarCharacter."@en .
+lexnet:similarSound a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:subPropertyOf lexnet:confusableWith ;
+    rdfs:label "same pronunciation (homophone)"@en , "đồng âm"@vi ;
+    rdfs:comment "Homophones: two entries of the same language whose forms have the same phonetic representation (sea/see /si/, 心/新 xīn). Generated from the data, not entered by hand."@en .
+lexnet:similarMeaning a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:subPropertyOf lexnet:confusableWith ;
+    rdfs:label "similar meaning or usage"@en , "nghĩa/cách dùng dễ lẫn"@vi .
+
+# 7. Pronunciation: no new property; ontolex:phoneticRep on the form
+#  - Chinese: pinyin with tones ("māo"@zh-Latn-pinyin)
+#  - English: US IPA from the CMU Pronouncing Dictionary ("si"@en-US-fonipa); Wikidata audio (P443)
+#    and IPA are fetched by federated queries through owl:sameAs to the lexeme
+#  - Vietnamese is the reference language; no pronunciation is stored
+
+# 8. Han characters: the writing layer, separate from the concept network
+lexnet:HanCharacter a owl:Class ; rdfs:label "Han character"@en , "Chữ Hán"@vi .
+lexnet:Radical a owl:Class ; rdfs:label "Radical"@en , "Bộ thủ"@vi .
+
+lexnet:hasCharacter a owl:ObjectProperty ;
+    rdfs:domain ontolex:Form ; rdfs:range lexnet:HanCharacter ;
+    rdfs:label "has character"@en , "gồm chữ"@vi .
+lexnet:hasRadical a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain lexnet:HanCharacter ; rdfs:range lexnet:Radical ;
+    rdfs:label "has radical"@en , "thuộc bộ"@vi .
+lexnet:strokeCount a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain lexnet:HanCharacter ; rdfs:range xsd:integer ;
+    rdfs:label "stroke count"@en , "số nét"@vi .
+lexnet:reading a owl:DatatypeProperty ;
+    rdfs:domain lexnet:HanCharacter ; rdfs:range xsd:string ;
+    rdfs:label "reading"@en , "cách đọc"@vi ;
+    rdfs:comment "Every standard reading of a character (polyphonic characters have several), from Unihan kTGHZ2013."@en .
+lexnet:commonReading a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf lexnet:reading ;
+    rdfs:domain lexnet:HanCharacter ; rdfs:range xsd:string ;
+    rdfs:label "most common reading"@en , "cách đọc phổ biến nhất"@vi .
+lexnet:radicalNumber a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain lexnet:Radical ; rdfs:range xsd:string ;
+    rdfs:label "Kangxi radical number"@en , "số bộ Khang Hy"@vi .
+lexnet:variantForm a owl:DatatypeProperty ;
+    rdfs:domain lexnet:Radical ; rdfs:range xsd:string ;
+    rdfs:label "common variant form"@en , "dạng biến thể thường gặp"@vi .
+
+# Look-alike characters (形近字) are linked as characters, so compounds are covered (白色 / 百, 干净 / 千).
+# Hand-picked. Not a subproperty of confusableWith: that links entries, so the reasoner would infer
+# that a character is an entry, which the disjoint node types forbid.
+lexnet:similarCharacter a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain lexnet:HanCharacter ; rdfs:range lexnet:HanCharacter ;
+    rdfs:label "look-alike character"@en , "chữ trông giống"@vi ;
+    rdfs:comment "Two Han characters that learners confuse because they look alike (白/百, 千/干), wherever they occur, including inside compound words. Curated pairs."@en .

@@ -1,0 +1,19 @@
+# Team-only material
+internal/
+*.xlsx
+
+# Oxford and HSK lists are copyrighted; kept locally for checks only
+ref/
+
+# Review files written by the scripts (lexnet-full.ttl is published)
+build/wikidata-suggestions.csv
+build/lexnet-*-with-*.csv
+build/new-rows/
+
+# The demo video is linked, not committed
+*.mp4
+*.mov
+
+__pycache__/
+*.pyc
+.DS_Store

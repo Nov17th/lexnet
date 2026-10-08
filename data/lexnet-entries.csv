@@ -1,0 +1,775 @@
+concept_id,lang,word,pref_label,pinyin,ipa,level,register,example,wikidata_lexeme
+animal,en,animal,x,,ˈænəməl,A1,,Dogs are my favorite animal.,L4497
+mammal,en,mammal,x,,ˈmæməl,,,"A whale is a mammal, not a fish.",L7987
+bird,en,bird,x,,bɝd,A1,,A small bird is singing in the tree.,L3417
+fish,en,fish,x,,fɪʃ,A1,,We saw many fish in the river.,L4080
+cat,en,cat,x,,kæt,A1,,The cat is sleeping on the sofa.,L7
+dog,en,dog,x,,dɔɡ,A1,,My dog likes to run in the park.,L1122
+tiger,en,tiger,x,,ˈtaɪɡɚ,,,The tiger has orange fur with black stripes.,L1121
+elephant,en,elephant,x,,ˈɛləfənt,A1,,An elephant has big ears and a long nose.,L7982
+horse,en,horse,x,,hɔrs,A1,,She rides her horse every weekend.,L1123
+cow,en,cow,x,,kaʊ,A1,,The cow gives us milk every morning.,L3726
+chicken,en,chicken,x,,ˈtʃɪkən,A1,,The chicken is walking around the farm.,L4774
+claw,en,claw,x,,klɔ,,,The cat sharpened its claws.,L16243
+lion,en,lion,x,,ˈlaɪən,A1,,The lion is sleeping under a tree.,L17815
+rabbit,en,rabbit,x,,ˈræbət,,,My rabbit likes to eat carrots.,L7983
+pig,en,pig,x,,pɪɡ,A1,,The pig is lying in the mud.,L3725
+sheep,en,sheep,x,,ʃip,A1,,The sheep are eating grass on the hill.,L4939
+bear,en,bear,x,,bɛr,A2,,We saw a big brown bear in the forest.,L3359
+snake,en,snake,x,,sneɪk,A1,,"Be careful, there is a snake in the grass.",L4942
+monkey,en,monkey,x,,ˈmʌŋki,A2,,The monkey is climbing the tree.,L4915
+mouse,en,mouse,x,,maʊs,A1,,A little mouse ran under the table.,L1119
+duck,en,duck,x,,dʌk,,,The ducks are swimming in the lake.,L4543
+insect,en,insect,x,,ˈɪnsɛkt,A2,,An ant is a very small insect.,L4612
+bee,en,bee,x,,bi,B1,,A bee is flying from flower to flower.,L4717
+tail,en,tail,x,,teɪl,B1,,The dog is wagging its tail.,L3442
+wing,en,wing,x,,wɪŋ,B1,,The bird opened its wings and flew away.,L3331
+body,en,body,x,,ˈbɑdi,A1,,Exercise is good for your body.,L3531
+head,en,head,x,,hɛd,A1,,He turned his head and smiled at me.,L3532
+hand,en,hand,x,,hænd,A1,,Please raise your hand if you know the answer.,L3542
+foot,en,foot,x,,fʊt,A1,,I hurt my foot when I was playing football.,L3549
+eye,en,eye,x,,aɪ,A1,,Close your eyes and make a wish.,L3534
+hair,en,hair,x,,hɛr,A1,,She has long black hair.,L3533
+mouth,en,mouth,x,,maʊθ,A1,,Don't talk with food in your mouth.,L3536
+nose,en,nose,x,,noʊz,A1,,My nose is cold in winter.,L3552
+ear,en,ear,x,,ir,A1,,He whispered something in my ear.,L3535
+arm,en,arm,x,,ɑrm,A1,,She held the baby in her arms.,L3259
+tooth,en,tooth,x,,tuθ,A1,,I brush my teeth twice a day.,L3538
+heart,en,heart,x,,hɑrt,A2,,My heart beats fast after I run.,L3545
+face,en,face,x,,feɪs,A1,,Wash your face before you go to bed.,L4048
+leg,en,leg,x,,lɛɡ,A1,,He broke his leg last year.,L3548
+finger,en,finger,x,,ˈfɪŋɡɚ,A2,,She wears a ring on her finger.,L3544
+neck,en,neck,x,,nɛk,A2,,The giraffe has a very long neck.,L3539
+back,en,back,x,,bæk,A1,,I sleep on my back.,L3214
+belly,en,belly,x,,ˈbɛli,,,The baby has a round belly.,L20924
+skin,en,skin,x,,skɪn,A2,,Babies have soft skin.,L3630
+bone,en,bone,x,,boʊn,A2,,The dog is playing with a bone.,L3698
+blood,en,blood,x,,blʌd,A2,,There is blood on his knee.,L3857
+tongue,en,tongue,x,,tʌŋ,B1,,The doctor asked me to show my tongue.,L3547
+person,en,person,x,,ˈpɝsən,A1,,She is a very kind person.,L501
+parent,en,parent,x,,ˈpɛrənt,A1,,My parents live in Hanoi.,L5232
+mother,en,mother,x,,ˈmʌðɚ,A1,,My mother cooks dinner every evening.,L3625
+father,en,father,x,,ˈfɑðɚ,A1,,My father works in a bank.,L3624
+child_offspring,en,child,x,,tʃaɪld,A1,,"They have two children, a boy and a girl.",L3341
+child_offspring,en,kid,,,kɪd,A2,informal,How many kids do you have?,L4163
+sister,en,sister,x,,ˈsɪstɚ,A1,,My sister is two years older than me.,L3626
+brother,en,brother,x,,ˈbrʌðɚ,A1,,My little brother likes to play games.,L3627
+grandmother,en,grandmother,x,,ˈɡrændmʌðɚ,A1,,My grandmother tells us old stories.,L5496
+grandfather,en,grandfather,x,,ˈɡrændfɑðɚ,A1,,My grandfather walks in the park every morning.,L5495
+son,en,son,x,,sʌn,A1,,Their son is a student.,L3644
+daughter,en,daughter,x,,ˈdɔtɚ,A1,,Their daughter is a doctor.,L3643
+friend,en,friend,x,,frɛnd,A1,,He is my best friend.,L4088
+man,en,man,x,,mæn,A1,,A tall man is standing at the door.,L3337
+woman,en,woman,x,,ˈwʊmən,A1,,That woman is my teacher.,L3338
+husband,en,husband,x,,ˈhʌzbənd,A1,,Her husband is a doctor.,L4140
+wife,en,wife,x,,waɪf,A1,,His wife is from Japan.,L4139
+boy,en,boy,x,,bɔɪ,A1,,The boy is playing with a ball.,L3339
+girl,en,girl,x,,ɡɝl,A1,,The girl is reading a book.,L3340
+baby,en,baby,x,,ˈbeɪbi,A1,,The baby is sleeping now.,L3351
+teacher,en,teacher,x,,ˈtitʃɚ,A1,,Our teacher is very kind.,L5219
+student,en,student,x,,ˈstudənt,A1,,There are thirty students in my class.,L5218
+doctor,en,doctor,x,,ˈdɑktɚ,A1,,You should see a doctor.,L3996
+child_young,en,child,x,,tʃaɪld,A1,,Every child needs love.,L3341
+child_young,en,kid,,,kɪd,A2,informal,The kids are playing in the park.,L4163
+teenager,en,teenager,x,,ˈtineɪdʒɚ,A1,,Many teenagers like music.,L12738
+teenager,en,teen,,,tin,B2,informal,My cousin is a teen now.,L18737
+adult,en,adult,x,,əˈdʌlt,A1,,Children must go with an adult.,L5791
+food,en,food,x,,fud,A1,,We need to buy some food.,L4082
+drink_noun,en,drink,x,,drɪŋk,A1,,Would you like a cold drink?,L4581
+fruit,en,fruit,x,,frut,A1,,I eat fruit every day.,L4591
+vegetable,en,vegetable,x,,ˈvɛdʒtəbəl,A1,,Eat more vegetables.,L12274
+apple,en,apple,x,,ˈæpəl,A1,,I eat an apple every morning.,L3257
+banana,en,banana,x,,bəˈnænə,A1,,Monkeys love bananas.,L30033
+orange_fruit,en,orange,x,,ˈɔrəndʒ,A1,,She is eating an orange.,L31491
+rice,en,rice,x,,raɪs,A1,,We eat rice with fish and vegetables.,L3751
+bread,en,bread,x,,brɛd,A1,,I buy fresh bread every morning.,L3865
+meat,en,meat,x,,mit,A1,,I don't eat meat.,L4641
+water,en,water,x,,ˈwɔtɚ,A1,,I drink a lot of water every day.,L3302
+tea,en,tea,x,,ti,A1,,Would you like a cup of tea?,L5355
+coffee,en,coffee,x,,ˈkɑfi,A1,,I drink coffee every morning.,L7091
+egg,en,egg,x,,ɛɡ,A1,,I had two eggs for breakfast.,L4775
+milk,en,milk,x,,mɪlk,A1,,Children should drink milk.,L4514
+sugar,en,sugar,x,,ˈʃʊɡɚ,A1,,Do you take sugar in your coffee?,L3718
+cake,en,cake,x,,keɪk,A1,,Mom made a cake for my birthday.,L4756
+carrot,en,carrot,x,,ˈkærət,A1,,Rabbits like to eat carrots.,L3782
+potato,en,potato,x,,pəˈteɪtoʊ,A1,,I like potatoes with meat.,L3784
+tomato,en,tomato,x,,təˈmeɪtoʊ,A1,,We need tomatoes for the salad.,L7993
+juice,en,juice,x,,dʒus,A1,,Can I have a glass of orange juice?,L23945
+meal,en,meal,x,,mil,A1,,We eat three meals a day.,L4640
+breakfast,en,breakfast,x,,ˈbrɛkfəst,A1,,What do you usually have for breakfast?,L3986
+lunch,en,lunch,x,,lʌntʃ,A1,,Let's have lunch together.,L3987
+dinner,en,dinner,x,,ˈdɪnɚ,A1,,We have dinner at seven o'clock.,L3989
+color,en,color,x,,ˈkʌlɚ,A1,,What is your favorite color?,L1347
+red,en,red,x,,rɛd,A1,,She is wearing red today.,L16617
+blue,en,blue,x,,blu,A1,,Blue is my favorite color.,L16616
+green,en,green,x,,ɡrin,A1,,Green is the color of grass.,L307354
+yellow,en,yellow,x,,ˈjɛloʊ,A1,,Yellow is a bright color.,L330679
+black,en,black,x,,blæk,A1,,He always wears black.,L317040
+white,en,white,x,,waɪt,A1,,White is the color of snow.,L29141
+brown,en,brown,x,,braʊn,A1,,Brown is the color of chocolate.,L30317
+gray,en,gray,x,,ɡreɪ,A1,,Gray is the color of rain clouds.,L321426
+pink,en,pink,x,,pɪŋk,A1,,Pink is her favorite color.,L325495
+purple,en,purple,x,,ˈpɝpəl,A1,,Purple is a mix of red and blue.,L326141
+orange_color,en,orange,x,,ˈɔrəndʒ,A1,,Orange is a mix of red and yellow.,L31491
+temperature,en,temperature,x,,ˈtɛmprətʃɚ,A2,,The temperature is high today.,L7196
+weather,en,weather,x,,ˈwɛðɚ,A1,,The weather is nice today.,L3307
+rain,en,rain,x,,reɪn,A1,,We stayed home because of the rain.,L3325
+wind,en,wind,x,,wɪnd,A2,,The wind is very strong today.,L3324
+snow,en,snow,x,,snoʊ,A1,,The children are playing in the snow.,L3323
+sun,en,sun,x,,sʌn,A1,,The sun is very hot today.,L3322
+bank_river,en,bank,x,,bæŋk,B1,,We sat on the river bank.,L3354
+plant,en,plant,x,,plænt,A1,,Plants need water and sunlight.,L3795
+tree,en,tree,x,,tri,A1,,There is a big tree in our garden.,L3565
+flower,en,flower,x,,ˈflaʊɚ,A1,,He gave her a flower.,L4589
+mountain,en,mountain,x,,ˈmaʊntən,A1,,They climbed the mountain last summer.,L3757
+river,en,river,x,,ˈrɪvɚ,A1,,We went swimming in the river.,L3755
+sea,en,sea,x,,si,A2,,I love swimming in the sea.,L3578
+moon,en,moon,x,,mun,A2,,The moon is very bright tonight.,L2884
+star,en,star,x,,stɑr,A1,,We can see many stars at night.,L2151
+fire,en,fire,x,,ˈfaɪɚ,A1,,Don't play with fire.,L4076
+cloud,en,cloud,x,,klaʊd,A2,,There are white clouds in the sky.,L4765
+sky,en,sky,x,,skaɪ,A2,,The sky is blue today.,L3632
+lake,en,lake,x,,leɪk,A2,,We walked around the lake.,L3754
+stone,en,stone,x,,stoʊn,A2,,He threw a stone into the water.,L3700
+grass,en,grass,x,,ɡræs,A2,,The cows are eating grass.,L4594
+leaf,en,leaf,x,,lif,B1,,The leaves turn yellow in fall.,L4912
+forest,en,forest,x,,ˈfɔrəst,A2,,Many animals live in the forest.,L7296
+time,en,time,x,,taɪm,A1,,I don't have time today.,L2510
+day,en,day,x,,deɪ,A1,,There are seven days in a week.,L1311
+night,en,night,x,,naɪt,A1,,I can't sleep at night.,L1312
+year,en,year,x,,jɪr,A1,,I visit my grandparents every year.,L2505
+month,en,month,x,,mʌnθ,A1,,There are twelve months in a year.,L2502
+week,en,week,x,,wik,A1,,I go to school five days a week.,L2501
+today,en,today,x,,təˈdeɪ,A1,,It is my birthday today.,L3283
+tomorrow,en,tomorrow,x,,təˈmɑroʊ,A1,,See you tomorrow!,L3284
+yesterday,en,yesterday,x,,ˈjɛstɚdeɪ,A1,,I was very busy yesterday.,L3285
+morning,en,morning,x,,ˈmɔrnɪŋ,A1,,I get up early in the morning.,L4035
+afternoon,en,afternoon,x,,æftɚˈnun,A1,,We have English class in the afternoon.,L5852
+hour,en,hour,x,,ˈaʊɚ,A1,,I waited for an hour.,L2508
+minute,en,minute,x,,ˈmɪnət,A1,,Please wait a minute.,L2500
+season,en,season,x,,ˈsizən,A2,,Summer is my favorite season.,L5630
+spring,en,spring,x,,sprɪŋ,A1,,Flowers open in spring.,L3334
+summer,en,summer,x,,ˈsʌmɚ,A1,,We go to the beach in summer.,L3332
+autumn,en,fall,x,,fɔl,A1,,The leaves are red and yellow in the fall.,L4058
+autumn,en,autumn,,,ˈɔtəm,C1,,The trees look beautiful in autumn.,L3266
+winter,en,winter,x,,ˈwɪntɚ,A1,,It snows a lot in winter.,L3333
+number,en,number,x,,ˈnʌmbɚ,A1,,Seven is my lucky number.,L4321
+zero,en,zero,x,,ˈzɪroʊ,A2,,Zero plus five is five.,L8883
+one,en,one,x,,wʌn,A1,,I have one brother.,L327
+two,en,two,x,,tu,A1,,She has two cats.,L329
+three,en,three,x,,θri,A1,,There are three people in my family.,L330
+four,en,four,x,,fɔr,A1,,A dog has four legs.,L332
+five,en,five,x,,faɪv,A1,,I have five fingers on each hand.,L333
+six,en,six,x,,sɪks,A1,,My little sister is six years old.,L334
+seven,en,seven,x,,ˈsɛvən,A1,,There are seven colors in a rainbow.,L335
+eight,en,eight,x,,eɪt,A1,,School starts at eight o'clock.,L336
+nine,en,nine,x,,naɪn,A1,,I go to bed at nine every night.,L337
+ten,en,ten,x,,tɛn,A1,,I can count from one to ten.,L338
+hundred,en,hundred,x,,ˈhʌndrəd,A1,,This book costs one hundred dollars.,L4138
+thousand,en,thousand,x,,ˈθaʊzənd,A1,,Thousands of people live in this city.,L2263
+bank_finance,en,bank,x,,bæŋk,A1,,I need to go to the bank to withdraw money.,L3354
+building,en,building,x,,ˈbɪldɪŋ,A1,,That tall building is a hotel.,L3870
+vehicle,en,vehicle,x,,ˈvihɪkəl,A2,,No vehicles are allowed on this street.,L7140
+house,en,house,x,,haʊs,A1,,They live in a big house.,L512
+school,en,school,x,,skul,A1,,I walk to school every day.,L3576
+city,en,city,x,,ˈsɪti,A1,,Hanoi is a big city.,L3929
+car,en,car,x,,kɑr,A1,,My father drives a black car.,L3648
+book,en,book,x,,bʊk,A1,,I am reading a good book.,L536
+home,en,home,x,,hoʊm,A1,,I want to go home.,L4129
+hospital,en,hospital,x,,ˈhɑspɪtəl,A1,,My mother works at a hospital.,L4133
+store,en,store,x,,stɔr,A1,,I bought some milk at the store.,L3702
+store,en,shop,,,ʃɑp,A1,,There is a small shop near my house.,L5364
+restaurant,en,restaurant,x,,ˈrɛstɚɑnt,A1,,We had dinner at a nice restaurant.,L5833
+room,en,room,x,,rum,A1,,My room is small but clean.,L3330
+door,en,door,x,,dɔr,A1,,Please close the door.,L3326
+window,en,window,x,,ˈwɪndoʊ,A1,,Can you open the window?,L3327
+furniture,en,furniture,x,,ˈfɝnɪtʃɚ,A2,,We bought new furniture for the living room.,L12162
+table,en,table,x,,ˈteɪbəl,A1,,The books are on the table.,L513
+chair,en,chair,x,,tʃɛr,A1,,Please sit on this chair.,L3916
+bed,en,bed,x,,bɛd,A1,,It's late. Go to bed.,L3361
+road,en,road,x,,roʊd,A1,,Be careful when you cross the road.,L3708
+bicycle,en,bicycle,x,,ˈbaɪsɪkəl,A1,,I ride my bicycle to school.,L10694
+bicycle,en,bike,,,baɪk,A1,,Can I borrow your bike?,L10698
+train,en,train,x,,treɪn,A1,,We went to Hue by train.,L5228
+airplane,en,plane,x,,pleɪn,A1,,The plane leaves at ten o'clock.,L46157
+airplane,en,airplane,,,ˈɛrpleɪn,,,I saw an airplane in the sky.,L6483
+eat,en,eat,x,,it,A1,,I eat breakfast at seven.,L1340
+go,en,go,x,,ɡoʊ,A1,,I go to school by bus.,L3006
+come,en,come,x,,kʌm,A1,,"Come here, please.",L3210
+see,en,see,x,,si,A1,,I can see the sea from my window.,L185
+sleep,en,sleep,x,,slip,A1,,Babies sleep a lot.,L1342
+read,en,read,x,,rid,A1,,I read a book every night.,L514
+run,en,run,x,,rʌn,A1,,He runs every morning.,L279
+drink_verb,en,drink,x,,drɪŋk,A1,,I drink tea every morning.,L1341
+look,en,look,x,,lʊk,A1,,Look at that bird!,L1319
+watch,en,watch,x,,wɑtʃ,A1,,We watch TV after dinner.,L192
+listen,en,listen,x,,ˈlɪsən,A1,,Listen to the teacher.,L183
+walk,en,walk,x,,wɔk,A1,,I walk to work every day.,L278
+sit,en,sit,x,,sɪt,A1,,Please sit down.,L1343
+stand,en,stand,x,,stænd,A1,,We stood in line for an hour.,L1344
+say,en,say,x,,seɪ,A1,,What did you say?,L381
+tell,en,tell,x,,tɛl,A1,,Can you tell me your name?,L5196
+write,en,write,x,,raɪt,A1,,Please write your name here.,L539
+buy,en,buy,x,,baɪ,A1,,I want to buy a new phone.,L3873
+sell,en,sell,x,,sɛl,A1,,They sell fruit at the market.,L5351
+borrow,en,borrow,x,,ˈbɑroʊ,A2,,Can I borrow your pen?,L9675
+lend,en,lend,x,,lɛnd,A2,,Can you lend me your pen?,L12581
+learn,en,learn,x,,lɝn,A1,,I want to learn Chinese.,L4176
+teach,en,teach,x,,titʃ,A1,,She teaches English at a high school.,L3444
+open,en,open,x,,ˈoʊpən,A1,,Open your books to page ten.,L1272
+close,en,close,x,,kloʊz,A1,,Please close your eyes.,L1273
+hot,en,hot,x,,hɑt,A1,,The soup is too hot to eat.,L3299
+cold,en,cold,x,,koʊld,A1,,It is very cold in winter here.,L3296
+big,en,big,x,,bɪɡ,A1,,An elephant is a very big animal.,L3413
+big,en,large,,,lɑrdʒ,A1,,She ordered a large pizza.,L3415
+small,en,small,x,,smɔl,A1,,This shirt is too small for me.,L3414
+good,en,good,x,,ɡʊd,A1,,This is a good book.,L3201
+bad,en,bad,x,,bæd,A1,,I had a bad day.,L3352
+new,en,new,x,,nu,A1,,I have a new bag.,L3225
+old_used,en,old,x,,oʊld,A1,,"This is an old phone, but it still works.",L3291
+happy,en,happy,x,,ˈhæpi,A1,,I am happy to see you.,L1349
+sad,en,sad,x,,sæd,A1,,She looks sad today.,L1350
+easy,en,easy,x,,ˈizi,A1,,The test was easy.,L4010
+difficult,en,difficult,x,,ˈdɪfəkəlt,A1,,Chinese is difficult to learn.,L3984
+fast,en,fast,x,,fæst,A1,,He is a fast runner.,L1389
+slow,en,slow,x,,sloʊ,A1,,The bus is very slow.,L1388
+tall,en,tall,x,,tɔl,A1,,My brother is very tall.,L1296
+short_height,en,short,x,,ʃɔrt,A1,,"She is short, but she is very fast.",L1295
+clean,en,clean,x,,klin,A1,,My hands are clean.,L5047
+dirty,en,dirty,x,,ˈdɝti,A1,,Your shoes are dirty.,L5084
+cool_temperature,en,cool,x,,kul,A1,,The evening air is cool.,L3297
+cool_great,en,cool,x,,kul,A1,informal,That's a really cool idea.,L3297
+young,en,young,x,,jʌŋ,A1,,My mother looks young for her age.,L3292
+old_aged,en,old,x,,oʊld,A1,,My grandfather is very old.,L3291
+long,en,long,x,,lɔŋ,A1,,The river is very long.,L3416
+short_length,en,short,x,,ʃɔrt,A1,,My hair is short now.,L1295
+animal,vi,động vật,x,,,,,,
+mammal,vi,động vật có vú,x,,,,,,
+bird,vi,chim,x,,,,,,
+fish,vi,cá,x,,,,,,
+cat,vi,mèo,x,,,,,,L405259
+dog,vi,chó,x,,,,,,
+tiger,vi,hổ,x,,,,,,
+elephant,vi,voi,x,,,,,,
+horse,vi,ngựa,x,,,,,,
+cow,vi,bò,x,,,,,,
+chicken,vi,gà,x,,,,,,
+claw,vi,móng vuốt,x,,,,,,
+lion,vi,sư tử,x,,,,,,
+rabbit,vi,thỏ,x,,,,,,
+pig,vi,lợn,x,,,,,,
+sheep,vi,cừu,x,,,,,,L691207
+bear,vi,gấu,x,,,,,,
+snake,vi,rắn,x,,,,,,
+monkey,vi,khỉ,x,,,,,,
+mouse,vi,chuột,x,,,,,,L1360864
+duck,vi,vịt,x,,,,,,
+insect,vi,côn trùng,x,,,,,,
+bee,vi,ong,x,,,,,,
+tail,vi,đuôi,x,,,,,,
+wing,vi,cánh,x,,,,,,
+body,vi,cơ thể,x,,,,,,
+head,vi,đầu,x,,,,,,
+hand,vi,bàn tay,x,,,,,,
+hand,vi,tay,,,,,,,
+foot,vi,bàn chân,x,,,,,,
+eye,vi,mắt,x,,,,,,
+hair,vi,tóc,x,,,,,,
+mouth,vi,miệng,x,,,,,,
+nose,vi,mũi,x,,,,,,
+ear,vi,tai,x,,,,,,
+arm,vi,cánh tay,x,,,,,,
+tooth,vi,răng,x,,,,,,
+heart,vi,tim,x,,,,,,
+face,vi,mặt,x,,,,,,
+leg,vi,chân,x,,,,,,
+finger,vi,ngón tay,x,,,,,,
+neck,vi,cổ,x,,,,,,
+back,vi,lưng,x,,,,,,
+belly,vi,bụng,x,,,,,,
+skin,vi,da,x,,,,,,
+bone,vi,xương,x,,,,,,
+blood,vi,máu,x,,,,,,
+tongue,vi,lưỡi,x,,,,,,
+person,vi,người,x,,,,,,
+parent,vi,cha mẹ,x,,,,,,
+mother,vi,mẹ,x,,,,,,
+father,vi,cha,x,,,,,,
+child_offspring,vi,con,x,,,,,,
+sister,vi,chị em gái,x,,,,,,
+brother,vi,anh em trai,x,,,,,,
+grandmother,vi,bà,x,,,,,,
+grandfather,vi,ông,x,,,,,,
+son,vi,con trai,x,,,,,,
+daughter,vi,con gái,x,,,,,,
+friend,vi,bạn,x,,,,,,
+man,vi,đàn ông,x,,,,,,
+woman,vi,phụ nữ,x,,,,,,
+husband,vi,chồng,x,,,,,,
+wife,vi,vợ,x,,,,,,
+boy,vi,cậu bé,x,,,,,,
+boy,vi,con trai,,,,,,,
+girl,vi,cô bé,x,,,,,,
+girl,vi,con gái,,,,,,,
+baby,vi,em bé,x,,,,,,
+teacher,vi,giáo viên,x,,,,,,
+student,vi,học sinh,x,,,,,,
+doctor,vi,bác sĩ,x,,,,,,
+child_young,vi,trẻ em,x,,,,,,
+child_young,vi,đứa trẻ,,,,,,,
+teenager,vi,thanh thiếu niên,x,,,,,,
+adult,vi,người lớn,x,,,,,,
+adult,vi,người trưởng thành,,,,,formal,,
+food,vi,thức ăn,x,,,,,,
+drink_noun,vi,đồ uống,x,,,,,,
+fruit,vi,trái cây,x,,,,,,
+vegetable,vi,rau,x,,,,,,
+apple,vi,táo,x,,,,,,
+banana,vi,chuối,x,,,,,,
+orange_fruit,vi,cam,x,,,,,,
+rice,vi,cơm,x,,,,,,
+bread,vi,bánh mì,x,,,,,,L1868
+meat,vi,thịt,x,,,,,,
+water,vi,nước,x,,,,,,L8217
+tea,vi,trà,x,,,,,,
+coffee,vi,cà phê,x,,,,,,
+egg,vi,trứng,x,,,,,,
+milk,vi,sữa,x,,,,,,
+sugar,vi,đường,x,,,,,,
+cake,vi,bánh ngọt,x,,,,,,
+carrot,vi,cà rốt,x,,,,,,
+potato,vi,khoai tây,x,,,,,,
+tomato,vi,cà chua,x,,,,,,
+juice,vi,nước ép,x,,,,,,
+meal,vi,bữa ăn,x,,,,,,
+breakfast,vi,bữa sáng,x,,,,,,
+lunch,vi,bữa trưa,x,,,,,,
+dinner,vi,bữa tối,x,,,,,,
+color,vi,màu sắc,x,,,,,,
+red,vi,màu đỏ,x,,,,,,
+blue,vi,màu xanh dương,x,,,,,,
+green,vi,màu xanh lá,x,,,,,,
+yellow,vi,màu vàng,x,,,,,,
+black,vi,màu đen,x,,,,,,
+white,vi,màu trắng,x,,,,,,
+brown,vi,màu nâu,x,,,,,,
+gray,vi,màu xám,x,,,,,,
+pink,vi,màu hồng,x,,,,,,
+purple,vi,màu tím,x,,,,,,
+orange_color,vi,màu cam,x,,,,,,
+temperature,vi,nhiệt độ,x,,,,,,
+weather,vi,thời tiết,x,,,,,,
+rain,vi,mưa,x,,,,,,
+wind,vi,gió,x,,,,,,
+snow,vi,tuyết,x,,,,,,
+sun,vi,mặt trời,x,,,,,,
+bank_river,vi,bờ sông,x,,,,,,
+plant,vi,thực vật,x,,,,,,
+tree,vi,cây,x,,,,,,
+flower,vi,hoa,x,,,,,,
+mountain,vi,núi,x,,,,,,
+river,vi,sông,x,,,,,,
+sea,vi,biển,x,,,,,,
+moon,vi,mặt trăng,x,,,,,,
+star,vi,ngôi sao,x,,,,,,
+fire,vi,lửa,x,,,,,,
+cloud,vi,mây,x,,,,,,
+sky,vi,bầu trời,x,,,,,,
+sky,vi,trời,,,,,,,
+lake,vi,hồ,x,,,,,,
+stone,vi,đá,x,,,,,,
+stone,vi,hòn đá,,,,,,,
+grass,vi,cỏ,x,,,,,,
+leaf,vi,lá,x,,,,,,
+forest,vi,rừng,x,,,,,,
+time,vi,thời gian,x,,,,,,
+day,vi,ngày,x,,,,,,
+night,vi,đêm,x,,,,,,
+year,vi,năm,x,,,,,,
+month,vi,tháng,x,,,,,,
+week,vi,tuần,x,,,,,,
+today,vi,hôm nay,x,,,,,,
+tomorrow,vi,ngày mai,x,,,,,,
+yesterday,vi,hôm qua,x,,,,,,
+morning,vi,buổi sáng,x,,,,,,
+afternoon,vi,buổi chiều,x,,,,,,
+afternoon,vi,chiều,,,,,,,
+hour,vi,giờ,x,,,,,,
+hour,vi,tiếng,,,,,informal,,
+minute,vi,phút,x,,,,,,
+season,vi,mùa,x,,,,,,
+spring,vi,mùa xuân,x,,,,,,
+summer,vi,mùa hè,x,,,,,,
+summer,vi,mùa hạ,,,,,literary,,
+autumn,vi,mùa thu,x,,,,,,
+winter,vi,mùa đông,x,,,,,,
+number,vi,số,x,,,,,,
+zero,vi,không,x,,,,,,
+one,vi,một,x,,,,,,
+two,vi,hai,x,,,,,,
+three,vi,ba,x,,,,,,
+four,vi,bốn,x,,,,,,
+five,vi,năm,x,,,,,,
+six,vi,sáu,x,,,,,,
+seven,vi,bảy,x,,,,,,
+eight,vi,tám,x,,,,,,
+nine,vi,chín,x,,,,,,
+ten,vi,mười,x,,,,,,
+hundred,vi,trăm,x,,,,,,
+thousand,vi,nghìn,x,,,,,,
+thousand,vi,ngàn,,,,,,,
+bank_finance,vi,ngân hàng,x,,,,,,
+building,vi,tòa nhà,x,,,,,,
+vehicle,vi,phương tiện giao thông,x,,,,,,
+house,vi,ngôi nhà,x,,,,,,
+house,vi,nhà,,,,,,,
+school,vi,trường học,x,,,,,,
+city,vi,thành phố,x,,,,,,
+car,vi,xe hơi,,,,,,,
+book,vi,sách,x,,,,,,
+home,vi,nhà,x,,,,,,
+hospital,vi,bệnh viện,x,,,,,,
+store,vi,cửa hàng,x,,,,,,
+restaurant,vi,nhà hàng,x,,,,,,
+room,vi,phòng,x,,,,,,
+door,vi,cửa,x,,,,,,
+window,vi,cửa sổ,x,,,,,,
+furniture,vi,đồ nội thất,x,,,,,,
+furniture,vi,đồ đạc,,,,,,,
+table,vi,bàn,x,,,,,,
+chair,vi,ghế,x,,,,,,
+bed,vi,giường,x,,,,,,
+road,vi,đường,x,,,,,,
+road,vi,con đường,,,,,,,
+bicycle,vi,xe đạp,x,,,,,,
+train,vi,tàu hỏa,x,,,,,,
+train,vi,xe lửa,,,,,,,
+airplane,vi,máy bay,x,,,,,,
+eat,vi,ăn,x,,,,,,L1682390
+eat,vi,xơi,,,,,polite,,
+go,vi,đi,x,,,,,,
+come,vi,đến,x,,,,,,
+see,vi,nhìn thấy,x,,,,,,
+see,vi,thấy,,,,,,,
+sleep,vi,ngủ,x,,,,,,
+read,vi,đọc,x,,,,,,
+run,vi,chạy,x,,,,,,
+drink_verb,vi,uống,x,,,,,,
+look,vi,nhìn,x,,,,,,
+watch,vi,xem,x,,,,,,
+listen,vi,nghe,x,,,,,,
+walk,vi,đi bộ,x,,,,,,
+sit,vi,ngồi,x,,,,,,
+stand,vi,đứng,x,,,,,,
+say,vi,nói,x,,,,,,
+tell,vi,bảo,x,,,,,,
+write,vi,viết,x,,,,,,
+buy,vi,mua,x,,,,,,
+sell,vi,bán,x,,,,,,
+borrow,vi,mượn,x,,,,,,
+borrow,vi,vay,,,,,,,
+lend,vi,cho mượn,x,,,,,,
+lend,vi,cho vay,,,,,,,
+learn,vi,học,x,,,,,,
+teach,vi,dạy,x,,,,,,
+open,vi,mở,x,,,,,,
+close,vi,đóng,x,,,,,,
+hot,vi,nóng,x,,,,,,
+cold,vi,lạnh,x,,,,,,
+big,vi,to,x,,,,,,
+big,vi,lớn,,,,,,,
+small,vi,nhỏ,x,,,,,,
+good,vi,tốt,x,,,,,,
+bad,vi,xấu,x,,,,,,
+new,vi,mới,x,,,,,,
+old_used,vi,cũ,x,,,,,,
+happy,vi,vui,x,,,,,,
+sad,vi,buồn,x,,,,,,
+easy,vi,dễ,x,,,,,,
+difficult,vi,khó,x,,,,,,
+fast,vi,nhanh,x,,,,,,
+slow,vi,chậm,x,,,,,,
+tall,vi,cao,x,,,,,,
+short_height,vi,thấp,x,,,,,,
+clean,vi,sạch,x,,,,,,
+dirty,vi,bẩn,x,,,,,,
+cool_temperature,vi,mát,x,,,,,,
+cool_great,vi,ngầu,x,,,,informal,,
+young,vi,trẻ,x,,,,,,
+old_aged,vi,già,x,,,,,,
+long,vi,dài,x,,,,,,
+short_length,vi,ngắn,x,,,,,,
+father,vi,bố,,,,,,,
+pig,vi,heo,,,,,,,
+car,vi,ô tô,x,,,,,,
+fruit,vi,hoa quả,,,,,,,
+animal,zh,动物,x,dòngwù,,3,,我喜欢小动物。,
+mammal,zh,哺乳动物,x,bǔrǔ dòngwù,,,,鲸鱼是哺乳动物，不是鱼。,
+bird,zh,鸟,x,niǎo,,2,,树上有一只小鸟。,L665863
+fish,zh,鱼,x,yú,,2,,河里有很多鱼。,L646710
+cat,zh,猫,x,māo,,1,,我家有一只猫。,L312717
+dog,zh,狗,x,gǒu,,1,,这只狗很可爱。,L647505
+tiger,zh,老虎,x,lǎohǔ,,4,,老虎是很大的动物。,
+elephant,zh,大象,x,dàxiàng,,5,,大象的鼻子很长。,
+horse,zh,马,x,mǎ,,3,,他会骑马。,L657718
+cow,zh,牛,x,niú,,3,,这头牛每天都吃很多草。,L657719
+chicken,zh,鸡,x,jī,,3,,院子里有几只鸡。,L657722
+claw,zh,爪子,x,zhuǎzi,,7-9,,猫的爪子很尖。,
+lion,zh,狮子,x,shīzi,,6,,狮子在树下睡觉。,
+rabbit,zh,兔子,x,tùzi,,5,,兔子喜欢吃胡萝卜。,
+pig,zh,猪,x,zhū,,5,,这只猪很胖。,L670376
+sheep,zh,羊,x,yáng,,3,,山上有很多羊。,L657720
+bear,zh,熊,x,xióng,,4,,熊喜欢吃蜂蜜。,
+snake,zh,蛇,x,shé,,5,,草里有一条蛇。,L670372
+monkey,zh,猴子,x,hóuzi,,5,,猴子在树上玩。,
+mouse,zh,老鼠,x,lǎoshǔ,,6,,老鼠跑到桌子下面去了。,
+duck,zh,鸭子,x,yāzi,,5,,湖上有几只鸭子。,
+insect,zh,昆虫,x,kūnchóng,,5,,蚂蚁是一种很小的昆虫。,
+bee,zh,蜜蜂,x,mìfēng,,6,,蜜蜂在花上飞来飞去。,
+tail,zh,尾巴,x,wěiba,,5,,小狗的尾巴一直在动。,
+wing,zh,翅膀,x,chìbǎng,,5,,鸟用翅膀飞。,
+body,zh,身体,x,shēntǐ,,2,,多运动对身体好。,
+head,zh,头,x,tóu,,2,,我头有点儿疼。,L646648
+hand,zh,手,x,shǒu,,2,,吃饭以前要洗手。,L646157
+foot,zh,脚,x,jiǎo,,3,,我的脚很疼。,L646384
+eye,zh,眼睛,x,yǎnjing,,2,,她的眼睛很大。,
+hair,zh,头发,x,tóufa,,3,,她的头发很长。,
+mouth,zh,嘴,x,zuǐ,,3,,嘴里有饭的时候不要说话。,
+nose,zh,鼻子,x,bízi,,4,,冬天我的鼻子很冷。,
+ear,zh,耳朵,x,ěrduo,,3,,兔子的耳朵很长。,
+arm,zh,胳膊,x,gēbo,,4,,我的胳膊很累。,
+tooth,zh,牙齿,x,yáchǐ,,5,,他的牙齿很白。,
+heart,zh,心,x,xīn,,4,,跑完步，我的心跳得很快。,L221399
+face,zh,脸,x,liǎn,,3,,她的脸红了。,
+leg,zh,腿,x,tuǐ,,3,,他的腿很长。,
+finger,zh,手指,x,shǒuzhǐ,,5,,她的手指很长。,
+neck,zh,脖子,x,bózi,,6,,长颈鹿的脖子很长。,
+back,zh,背,x,bèi,,5,,我的背有点儿疼。,L666737
+belly,zh,肚子,x,dùzi,,4,,我肚子饿了。,
+skin,zh,皮肤,x,pífū,,4,,她的皮肤很白。,
+bone,zh,骨头,x,gǔtou,,6,,小狗在吃骨头。,
+blood,zh,血,x,xiě,,4,,他手上有血。,
+tongue,zh,舌头,x,shétou,,6,,医生让我把舌头伸出来。,
+person,zh,人,x,rén,,1,,他是一个好人。,L7971
+parent,zh,父母,x,fùmǔ,,4,,我的父母都是老师。,
+mother,zh,母亲,x,mǔqīn,,4,,我母亲在医院工作。,L643860
+father,zh,父亲,x,fùqīn,,4,,我父亲每天早上都看报纸。,L643840
+child_offspring,zh,孩子,x,háizi,,1,,他们有两个孩子。,
+child_offspring,zh,子女,,zǐnǚ,,5,formal,父母都希望子女幸福。,
+sister,zh,姐妹,x,jiěmèi,,3,,她们姐妹俩都喜欢唱歌。,
+brother,zh,兄弟,x,xiōngdì,,4,,他们兄弟俩长得很像。,
+grandmother,zh,奶奶,x,nǎinai,,2,,奶奶每天都给我们做饭。,
+grandfather,zh,爷爷,x,yéye,,2,,爷爷喜欢在公园里散步。,
+son,zh,儿子,x,érzi,,1,,他的儿子今年五岁。,
+daughter,zh,女儿,x,nǚ'ér,,1,,我女儿喜欢唱歌。,
+friend,zh,朋友,x,péngyou,,1,,他是我最好的朋友。,L1007712
+man,zh,男人,x,nánrén,,3,,门口站着一个男人。,
+woman,zh,女人,x,nǚrén,,3,,那个女人是我的老师。,
+husband,zh,丈夫,x,zhàngfu,,2,,她丈夫是医生。,
+husband,zh,老公,,lǎogōng,,5,informal,我老公今天不在家。,
+wife,zh,妻子,x,qīzi,,2,,他妻子是中国人。,
+wife,zh,老婆,,lǎopo,,5,informal,我老婆做饭很好吃。,
+boy,zh,男孩儿,x,nánháir,,2,,那个男孩儿在踢足球。,
+boy,zh,男孩子,,nánháizi,,,,那个男孩子很高。,
+girl,zh,女孩儿,x,nǚháir,,2,,那个女孩儿在看书。,
+girl,zh,女孩子,,nǚháizi,,,,这个女孩子很喜欢画画儿。,
+baby,zh,婴儿,x,yīng'ér,,6,,婴儿每天都要睡很长时间。,
+baby,zh,宝宝,,bǎobao,,,informal,宝宝睡着了。,
+teacher,zh,老师,x,lǎoshī,,1,,她是我们的汉语老师。,L312716
+student,zh,学生,x,xuéshēng,,1,,我们班有三十个学生。,
+doctor,zh,医生,x,yīshēng,,1,,你应该去看医生。,
+doctor,zh,大夫,,dàifu,,4,informal,大夫，我头疼。,L1472949
+child_young,zh,孩子,x,háizi,,1,,孩子们在公园里玩。,
+child_young,zh,小孩儿,,xiǎoháir,,2,informal,小孩儿都喜欢吃糖。,
+child_young,zh,儿童,,értóng,,4,formal,六月一日是儿童节。,
+teenager,zh,青少年,x,qīngshàonián,,,,很多青少年喜欢玩手机。,
+adult,zh,成年人,x,chéngniánrén,,,,这部电影只适合成年人看。,
+adult,zh,大人,,dàren,,3,informal,大人说话，小孩儿别插嘴。,
+adult,zh,成人,,chéngrén,,5,formal,成人票一百块，儿童票五十块。,
+food,zh,食物,x,shíwù,,4,,我们要多吃健康的食物。,L314324
+drink_noun,zh,饮料,x,yǐnliào,,3,,你想喝什么饮料？,
+fruit,zh,水果,x,shuǐguǒ,,1,,我每天都吃水果。,
+vegetable,zh,蔬菜,x,shūcài,,5,,多吃蔬菜对身体好。,
+apple,zh,苹果,x,píngguǒ,,1,,这个苹果很甜。,L986497
+banana,zh,香蕉,x,xiāngjiāo,,3,,猴子喜欢吃香蕉。,
+orange_fruit,zh,橙子,x,chéngzi,,5,,我买了几个橙子。,
+rice,zh,米饭,x,mǐfàn,,1,,我中午吃米饭。,L312718
+bread,zh,面包,x,miànbāo,,1,,我早上吃面包。,
+meat,zh,肉,x,ròu,,2,,我不吃肉。,
+water,zh,水,x,shuǐ,,1,,请给我一杯水。,L8219
+tea,zh,茶,x,chá,,1,,你喝茶还是喝咖啡？,L8430
+coffee,zh,咖啡,x,kāfēi,,2,,他每天早上都喝一杯咖啡。,
+egg,zh,鸡蛋,x,jīdàn,,1,,我早上吃了两个鸡蛋。,
+milk,zh,牛奶,x,niúnǎi,,1,,孩子每天都要喝牛奶。,
+sugar,zh,糖,x,táng,,3,,咖啡里不要放糖。,
+cake,zh,蛋糕,x,dàngāo,,3,,妈妈给我买了一个生日蛋糕。,
+carrot,zh,胡萝卜,x,húluóbo,,,,兔子爱吃胡萝卜。,
+potato,zh,土豆,x,tǔdòu,,5,,我喜欢吃土豆。,
+tomato,zh,番茄,x,fānqié,,5,,番茄是红色的。,
+juice,zh,果汁,x,guǒzhī,,4,,我想喝一杯果汁。,
+meal,zh,饭,x,fàn,,1,,我们一天吃三顿饭。,L668269
+breakfast,zh,早饭,x,zǎofàn,,1,,你吃早饭了吗？,
+breakfast,zh,早餐,,zǎocān,,4,,酒店的早餐七点开始。,
+lunch,zh,午饭,x,wǔfàn,,1,,我们一起吃午饭吧。,
+lunch,zh,午餐,,wǔcān,,4,,学校的午餐很便宜。,
+dinner,zh,晚饭,x,wǎnfàn,,1,,我们七点吃晚饭。,
+dinner,zh,晚餐,,wǎncān,,4,,今天的晚餐很丰富。,
+color,zh,颜色,x,yánsè,,2,,你喜欢什么颜色？,
+red,zh,红色,x,hóngsè,,2,,红色是中国人喜欢的颜色。,L747516
+blue,zh,蓝色,x,lánsè,,,,天空是蓝色的。,
+green,zh,绿色,x,lǜsè,,2,,草是绿色的。,L747515
+yellow,zh,黄色,x,huángsè,,3,,香蕉是黄色的。,L747514
+black,zh,黑色,x,hēisè,,2,,他喜欢穿黑色的衣服。,L747511
+white,zh,白色,x,báisè,,2,,雪是白色的。,L747510
+brown,zh,棕色,x,zōngsè,,6,,熊的毛是棕色的。,L747529
+brown,zh,咖啡色,,kāfēisè,,,,我想买一双咖啡色的鞋。,
+gray,zh,灰色,x,huīsè,,5,,今天的天空是灰色的。,L747527
+pink,zh,粉色,x,fěnsè,,,,她的房间是粉色的。,L747525
+pink,zh,粉红色,,fěnhóngsè,,,,她穿了一条粉红色的裙子。,
+purple,zh,紫色,x,zǐsè,,,,紫色是红色和蓝色混在一起的颜色。,L747517
+orange_color,zh,橙色,x,chéngsè,,,,橙色是红色和黄色混在一起的颜色。,L747520
+temperature,zh,温度,x,wēndù,,4,,今天的温度很高。,L480094
+weather,zh,天气,x,tiānqì,,1,,今天天气很好。,
+rain,zh,雨,x,yǔ,,1,,外面下雨了。,L665803
+wind,zh,风,x,fēng,,3,,今天风很大。,L665001
+snow,zh,雪,x,xuě,,1,,冬天这里常常下雪。,L665449
+sun,zh,太阳,x,tàiyáng,,3,,太阳出来了。,L43685
+bank_river,zh,河岸,x,hé'àn,,,,我们在河岸上散步。,
+plant,zh,植物,x,zhíwù,,4,,植物需要水和阳光。,
+tree,zh,树,x,shù,,3,,院子里有一棵大树。,L665931
+flower,zh,花,x,huā,,2,,公园里的花都开了。,L1324298
+mountain,zh,山,x,shān,,3,,我们周末去爬山。,L20445
+river,zh,河,x,hé,,3,,河里的水很干净。,L665849
+sea,zh,海,x,hǎi,,3,,我很喜欢去海边。,L665844
+moon,zh,月亮,x,yuèliang,,3,,今天晚上的月亮很圆。,
+star,zh,星星,x,xīngxing,,4,,天上有很多星星。,
+fire,zh,火,x,huǒ,,4,,小孩子不要玩火。,L20442
+cloud,zh,云,x,yún,,4,,天上有一朵白云。,L646172
+sky,zh,天空,x,tiānkōng,,5,,天空中有很多白云。,
+sky,zh,天,,tiān,,1,,天很蓝，没有云。,L646161
+lake,zh,湖,x,hú,,5,,湖边有很多人在散步。,
+stone,zh,石头,x,shítou,,5,,他把石头扔进了河里。,L647808
+grass,zh,草,x,cǎo,,3,,牛在吃草。,L665945
+leaf,zh,叶子,x,yèzi,,4,,秋天叶子变黄了。,
+forest,zh,森林,x,sēnlín,,4,,森林里有很多动物。,
+time,zh,时间,x,shíjiān,,1,,我今天没有时间。,L297525
+day,zh,天,x,tiān,,1,,我在北京住了三天。,L646161
+night,zh,晚上,x,wǎnshang,,1,,我晚上十点睡觉。,
+year,zh,年,x,nián,,1,,我明年去中国。,L312719
+month,zh,月,x,yuè,,1,,我下个月去北京。,L43694
+week,zh,星期,x,xīngqī,,1,,今天星期几？,L312673
+today,zh,今天,x,jīntiān,,1,,今天是我的生日。,L312714
+tomorrow,zh,明天,x,míngtiān,,1,,明天见！,L480093
+yesterday,zh,昨天,x,zuótiān,,1,,昨天我很忙。,
+morning,zh,早上,x,zǎoshang,,1,,我每天早上六点起床。,L643808
+morning,zh,上午,,shàngwǔ,,1,,我上午有汉语课。,
+afternoon,zh,下午,x,xiàwǔ,,1,,我们下午去公园吧。,
+hour,zh,小时,x,xiǎoshí,,1,,我等了一个小时。,
+hour,zh,钟头,,zhōngtóu,,6,informal,我们走了两个钟头。,
+minute,zh,分钟,x,fēnzhōng,,1,,请等五分钟。,L312667
+season,zh,季节,x,jìjié,,3,,你最喜欢哪个季节？,
+spring,zh,春天,x,chūntiān,,3,,春天到了，花都开了。,
+summer,zh,夏天,x,xiàtiān,,3,,夏天很热。,L594857
+autumn,zh,秋天,x,qiūtiān,,3,,秋天的天气很舒服。,
+winter,zh,冬天,x,dōngtiān,,3,,北方的冬天常常下雪。,
+number,zh,数字,x,shùzì,,4,,八是我最喜欢的数字。,
+zero,zh,零,x,líng,,1,,零加五等于五。,L3513
+one,zh,一,x,yī,,1,,我有一个哥哥。,L1773
+two,zh,二,x,èr,,1,,今天是二月二号。,L3512
+two,zh,两,,liǎng,,1,,我有两个妹妹。,
+three,zh,三,x,sān,,1,,我家有三口人。,L290217
+four,zh,四,x,sì,,1,,狗有四条腿。,L290218
+five,zh,五,x,wǔ,,1,,我妹妹五岁了。,L290219
+six,zh,六,x,liù,,1,,我六点起床。,L290220
+seven,zh,七,x,qī,,1,,一个星期有七天。,L290221
+eight,zh,八,x,bā,,1,,我们八点上课。,L290222
+nine,zh,九,x,jiǔ,,1,,我九点睡觉。,L290223
+ten,zh,十,x,shí,,1,,我会从一数到十。,L290224
+hundred,zh,百,x,bǎi,,1,,这本书一百块钱。,L221412
+thousand,zh,千,x,qiān,,1,,这个城市有几千年的历史。,L290226
+bank_finance,zh,银行,x,yínháng,,3,,我去银行取钱。,
+building,zh,建筑,x,jiànzhù,,5,,那座建筑很高。,
+vehicle,zh,车辆,x,chēliàng,,5,,这条路上车辆很多。,
+house,zh,房子,x,fángzi,,3,,他们住在一个大房子里。,
+school,zh,学校,x,xuéxiào,,1,,我每天都走路去学校。,L204160
+city,zh,城市,x,chéngshì,,3,,北京是一个大城市。,L1564532
+car,zh,汽车,x,qìchē,,3,,我爸爸开汽车上班。,
+book,zh,书,x,shū,,1,,这本书很有意思。,L312725
+home,zh,家,x,jiā,,1,,我想回家。,L665115
+hospital,zh,医院,x,yīyuàn,,1,,我妈妈在医院工作。,
+store,zh,商店,x,shāngdiàn,,1,,我去商店买东西。,L312723
+store,zh,店,,diàn,,1,,这家店的东西很便宜。,
+restaurant,zh,饭馆,x,fànguǎn,,2,,我们去饭馆吃饭吧。,
+restaurant,zh,餐厅,,cāntīng,,4,,这家餐厅的菜很好吃。,
+room,zh,房间,x,fángjiān,,1,,我的房间很小。,
+door,zh,门,x,mén,,2,,请关门。,L642632
+window,zh,窗户,x,chuānghu,,4,,请打开窗户。,
+furniture,zh,家具,x,jiājù,,4,,我们买了新家具。,
+table,zh,桌子,x,zhuōzi,,1,,书在桌子上。,
+chair,zh,椅子,x,yǐzi,,1,,请坐在这把椅子上。,
+bed,zh,床,x,chuáng,,2,,我的床很舒服。,L668339
+road,zh,路,x,lù,,2,,这条路很长。,L666883
+road,zh,道路,,dàolù,,4,,这条道路很宽。,
+bicycle,zh,自行车,x,zìxíngchē,,3,,我骑自行车去学校。,L1216676
+train,zh,火车,x,huǒchē,,1,,我们坐火车去上海。,
+airplane,zh,飞机,x,fēijī,,1,,飞机十点起飞。,L312666
+eat,zh,吃,x,chī,,1,,我们一起吃饭吧。,L312662
+eat,zh,食,,shí,,,literary,这种鱼不能生食。,L657448
+go,zh,去,x,qù,,1,,我明天去北京。,L312722
+come,zh,来,x,lái,,1,,他明天来我家。,L665752
+see,zh,看见,x,kànjiàn,,1,,我看见他在图书馆。,
+see,zh,看到,,kàndào,,,,我在电视上看到了她。,
+sleep,zh,睡觉,x,shuìjiào,,1,,我十一点睡觉。,
+read,zh,读,x,dú,,1,,请读一下这个句子。,L312664
+run,zh,跑,x,pǎo,,2,,他跑得很快。,L670472
+drink_verb,zh,喝,x,hē,,1,,我每天早上都喝茶。,L312669
+drink_verb,zh,饮,,yǐn,,,literary,饮水思源。,
+look,zh,看,x,kàn,,1,,你看，那是我们的学校。,
+watch,zh,看,x,kàn,,1,,我晚上喜欢看电视。,
+listen,zh,听,x,tīng,,1,,请听老师说。,L666483
+walk,zh,走,x,zǒu,,2,,他走得很慢。,L304676
+walk,zh,走路,,zǒulù,,2,,我每天都走路上班。,
+sit,zh,坐,x,zuò,,1,,请坐。,L312728
+stand,zh,站,x,zhàn,,3,,他站在门口。,L670469
+say,zh,说,x,shuō,,1,,你说什么？,L298297
+tell,zh,告诉,x,gàosu,,2,,请告诉我你的名字。,
+write,zh,写,x,xiě,,1,,请在这里写你的名字。,L312672
+buy,zh,买,x,mǎi,,1,,我想买一本书。,
+sell,zh,卖,x,mài,,1,,他在市场卖水果。,
+borrow,zh,借,x,jiè,,3,,我可以跟你借一支笔吗？,
+lend,zh,借,x,jiè,,3,,我借给你一本书吧。,
+learn,zh,学习,x,xuéxí,,1,,我在学习汉语。,
+learn,zh,学,,xué,,1,,我想学做中国菜。,L651174
+teach,zh,教,x,jiāo,,2,,她教我们唱歌。,L649768
+open,zh,开,x,kāi,,1,,请开门。,L312715
+open,zh,打开,,dǎkāi,,2,,请打开书。,
+close,zh,关,x,guān,,3,,出去的时候请关灯。,
+hot,zh,热,x,rè,,1,,今天很热。,L668439
+cold,zh,冷,x,lěng,,1,,冬天很冷。,
+big,zh,大,x,dà,,1,,这个房间很大。,L486840
+small,zh,小,x,xiǎo,,1,,这件衣服太小了。,L663758
+good,zh,好,x,hǎo,,1,,这本书很好。,L7977
+bad,zh,坏,x,huài,,2,,他是个坏人。,L670339
+new,zh,新,x,xīn,,1,,我买了一个新手机。,L667959
+old_used,zh,旧,x,jiù,,3,,这件衣服很旧了。,L668303
+happy,zh,高兴,x,gāoxìng,,1,,见到你很高兴。,L312668
+sad,zh,伤心,x,shāngxīn,,4,,她今天很伤心。,
+easy,zh,容易,x,róngyì,,3,,这个问题很容易。,
+difficult,zh,难,x,nán,,3,,汉语难吗？,L666430
+fast,zh,快,x,kuài,,2,,火车比汽车快。,L648486
+slow,zh,慢,x,màn,,2,,这辆车很慢。,L670351
+tall,zh,高,x,gāo,,2,,我哥哥很高。,L648501
+short_height,zh,矮,x,ǎi,,3,,她比我矮。,
+clean,zh,干净,x,gānjìng,,3,,我的手很干净。,
+dirty,zh,脏,x,zāng,,3,,你的鞋很脏。,L1451759
+cool_temperature,zh,凉快,x,liángkuai,,3,,今天很凉快。,
+cool_great,zh,酷,x,kù,,6,informal,你的新车真酷！,
+young,zh,年轻,x,niánqīng,,3,,她看起来很年轻。,
+old_aged,zh,老,x,lǎo,,3,,我爷爷已经很老了。,L653234
+long,zh,长,x,cháng,,2,,这条河很长。,L656256
+short_length,zh,短,x,duǎn,,3,,我的头发很短。,L666412
+father,zh,爸爸,,bàba,,1,informal,爸爸今天很忙。,L312659
+father,zh,爹,,diē,,7-9,,他爹在城里打工。,
+mother,zh,妈妈,,māma,,1,informal,妈妈做的饭很好吃。,L643820
+mother,zh,娘,,niáng,,7-9,,娘，我回来了！,
+room,zh,屋子,,wūzi,,3,,屋子里很暖和。,
