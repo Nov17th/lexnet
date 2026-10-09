@@ -133,7 +133,7 @@ lexnet:ProficiencyLevel a owl:Class ;
 lexnet:level a owl:ObjectProperty, owl:FunctionalProperty ;
     rdfs:domain ontolex:LexicalSense ; rdfs:range lexnet:ProficiencyLevel ;
     rdfs:label "proficiency level"@en , "cấp độ"@vi ;
-    rdfs:comment "Level of knowing a word in one particular sense. Word-level lists (Oxford 3000, HSK) are recorded on the word's core sense; the level of a whole word is the lowest level among its senses."@en .
+    rdfs:comment "Level of knowing a word in one particular sense. A level from a word list (Oxford 3000 and 5000, HSK 3.0) applies to every sense of the word, unless the list gives the senses separate levels."@en .
 lexnet:rank a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:domain lexnet:ProficiencyLevel ; rdfs:range xsd:integer ;
     rdfs:label "rank"@en , "thứ hạng"@vi ;
@@ -141,7 +141,7 @@ lexnet:rank a owl:DatatypeProperty, owl:FunctionalProperty ;
 
 lexnet:CEFR a skos:ConceptScheme ;
     rdfs:label "CEFR"@en , "Khung CEFR"@vi ;
-    rdfs:comment "Common European Framework of Reference; English levels taken from the Oxford 3000."@en .
+    rdfs:comment "Common European Framework of Reference; English levels taken from the Oxford 3000 and 5000."@en .
 lexnet:HSK a skos:ConceptScheme ;
     rdfs:label "HSK 3.0 (2025 syllabus)"@en , "HSK 3.0 (chuẩn 2025)"@vi ;
     rdfs:comment "Chinese proficiency levels of the HSK 3.0 syllabus (Nov 2025); levels 7–9 form one shared band."@en .
@@ -188,7 +188,8 @@ lexnet:hasExample a owl:ObjectProperty ;
 #    Look-alike Han characters are linked as characters instead (similarCharacter, section 8).
 #  - similarSound is not entered by hand: csv_to_ttl.py links two words of one language with the same
 #    phoneticRep (IPA for English, pinyin with tones for Chinese; 书 shū / 树 shù do not count).
-#    OWL 2 DL cannot compare literal values of two individuals, so the rule runs at build time.
+#    OWL 2 DL cannot infer from two equal pronunciations that two different words sound alike (a key
+#    would make them the same individual), so the rule runs at build time.
 lexnet:confusableWith a owl:ObjectProperty, owl:SymmetricProperty ;
     rdfs:domain ontolex:LexicalEntry ; rdfs:range ontolex:LexicalEntry ;
     rdfs:label "confusable with"@en , "dễ nhầm với"@vi .
