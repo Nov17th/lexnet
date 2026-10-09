@@ -45,7 +45,6 @@ scripts/    import_sheet.py            copies the team spreadsheet (.xlsx) into 
 queries/    queries.rq                 18 demo SPARQL queries, 3 of them federated with Wikidata
 web/                                  Next.js dictionary, graph explorer and SPARQL interface
 build/      lexnet-full.ttl            ontology + data, generated; do not edit
-eval/       baseline-2026-10-06/       the automatically filled data before review, for the evaluation
 deliverables/
             report/                    LexNet-report.pdf, stats.tex (numbers from report_stats.py), figures/
             slides/                    LexNet-slides.pdf
