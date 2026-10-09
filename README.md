@@ -43,6 +43,7 @@ scripts/    import_sheet.py            copies the team spreadsheet (.xlsx) into 
             en_ipa.py                  English IPA from the CMU Pronouncing Dictionary
             candidates_to_rows.py      turns picked concept candidates into spreadsheet rows
 queries/    queries.rq                 18 demo SPARQL queries, 3 of them federated with Wikidata
+web/                                  Next.js dictionary, graph explorer and SPARQL interface
 build/      lexnet-full.ttl            ontology + data, generated; do not edit
 eval/       baseline-2026-10-06/       the automatically filled data before review, for the evaluation
 deliverables/
@@ -66,6 +67,12 @@ fuseki-server --file build/lexnet-full.ttl /lexnet   # SPARQL endpoint at http:/
 ```
 
 Run the queries in `queries/queries.rq` one at a time in Fuseki, or open `build/lexnet-full.ttl` in Protégé and start HermiT to see the inferences. With a local `ref/` folder holding the official word lists (not distributed), `csv_to_ttl.py` also checks every level, pinyin and IPA against them.
+
+## Web application
+
+The [web application](web/README.md) provides a multilingual dictionary, topic filters, a graph explorer and a read-only SPARQL console. It queries Fuseki at runtime and reads the generated `build/lexnet-full.ttl` without copying or modifying the dataset.
+
+See [web/README.md](web/README.md) for installation, configuration, local startup and checks. GitHub Pages serves the published RDF and ontology; running the web application requires Node.js and a SPARQL endpoint.
 
 ## Data sources
 
