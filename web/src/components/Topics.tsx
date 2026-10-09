@@ -161,7 +161,10 @@ export default function Topics() {
       {result.data && (
         <>
           <div className="section-heading">
-            <h2>{result.data.total} entry senses</h2>
+            <h2>
+              {result.data.total} entry{" "}
+              {result.data.total === 1 ? "sense" : "senses"}
+            </h2>
             <span className="muted">Page {page}</span>
           </div>
           <p className="muted">{result.data.levelNote}</p>
@@ -196,7 +199,8 @@ export default function Topics() {
               ← Previous
             </button>
             <span>
-              {result.data.total} senses · {result.data.pageSize} per page
+              {result.data.total} {result.data.total === 1 ? "sense" : "senses"}{" "}
+              · {result.data.pageSize} per page
             </span>
             <button
               className="button secondary"

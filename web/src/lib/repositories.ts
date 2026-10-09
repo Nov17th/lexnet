@@ -118,7 +118,7 @@ export async function entry(id: string): Promise<Entry> {
     ),
     select(confusablesQuery(id)),
     select(
-      `SELECT ?character ?label WHERE { ${resource(id)} ontolex:canonicalForm/lexnet:hasCharacter ?character . OPTIONAL { ?character rdfs:label ?label } }`,
+      `SELECT ?character ?label ?definition WHERE { ${resource(id)} ontolex:canonicalForm/lexnet:hasCharacter ?character . OPTIONAL { ?character rdfs:label ?label } OPTIONAL { ?character skos:definition ?definition . FILTER(LANG(?definition)="en") } }`,
     ),
     meta(id),
   ]);
@@ -151,9 +151,10 @@ export async function entry(id: string): Promise<Entry> {
       };
     }),
   );
-  const allChars = [...group(chars, "character")].map(([c, rs]) =>
-    entity(c, labels(rs)),
-  );
+  const allChars = [...group(chars, "character")].map(([c, rs]) => ({
+    ...entity(c, labels(rs)),
+    definitions: labels(rs, "definition"),
+  }));
   return {
     ...w,
     senses,
@@ -417,6 +418,7 @@ export async function graph(
   resource(id);
   const nodes = new Map<string, Graph["nodes"][number]>();
   const edges = new Map<string, Graph["edges"][number]>();
+  const senseIds = new Set<string>();
   let frontier = [id];
   let truncated = false;
   const addNode = (
@@ -440,6 +442,8 @@ export async function graph(
         value(rs[0], typeKey) || "Resource",
       ),
     });
+    if (rs.some((r) => value(r, typeKey) === ns.ontolex + "LexicalSense"))
+      senseIds.add(id);
     return true;
   };
   const root = await select(
@@ -500,6 +504,19 @@ export async function graph(
       });
     }
     frontier = [...next].filter((i) => i.startsWith(config.base));
+  }
+  if (senseIds.size) {
+    const senseRows = await select(
+      `SELECT ?sense ?written ?definition ?conceptLabel WHERE { VALUES ?sense { ${[...senseIds].map(resource).join(" ")} } OPTIONAL { ?entry ontolex:sense ?sense ; ontolex:canonicalForm/ontolex:writtenRep ?written } OPTIONAL { ?sense ontolex:isLexicalizedSenseOf ?concept . OPTIONAL { ?concept skos:definition ?definition . FILTER(LANG(?definition)="en") } OPTIONAL { ?concept skos:prefLabel ?conceptLabel } } }`,
+    );
+    for (const [sid, rs] of group(senseRows, "sense")) {
+      const node = nodes.get(sid)!;
+      const word = preferred(labels(rs, "written"), "");
+      const meaning =
+        value(rs.find((r) => r.definition) || {}, "definition") ||
+        preferred(labels(rs, "conceptLabel"), "");
+      node.label = [word, meaning].filter(Boolean).join(" · ") || node.label;
+    }
   }
   return {
     nodes: [...nodes.values()],

@@ -124,7 +124,9 @@ export default function Dictionary() {
           <div className="section-heading">
             <h2>Search results</h2>
             <span className="muted">
-              {result.data ? `${entries.length} matching entries` : ""}
+              {result.data
+                ? `${entries.length} matching ${entries.length === 1 ? "entry" : "entries"}`
+                : ""}
             </span>
           </div>
           {result.loading && <Loading />}

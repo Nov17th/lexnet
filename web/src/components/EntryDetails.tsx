@@ -7,6 +7,7 @@ import type {
   Character,
   Concept,
   Entry,
+  LiteralValue,
   Sense,
 } from "@/lib/types";
 import {
@@ -48,10 +49,10 @@ function Audio({ id, revision }: { id: string; revision: number }) {
             onError={() =>
               setError("Audio could not be loaded or played in this browser.")
             }
-            aria-label={`Pronunciation of ${c.representation}`}
+            aria-label={`Pronunciation of ${c.representation}: ${c.label}`}
           />
           <a href={c.source} target="_blank" rel="noreferrer">
-            Audio source: Wikidata ↗
+            {c.label} · Audio source: Wikidata ↗
           </a>
         </div>
       ))}
@@ -67,15 +68,26 @@ function Audio({ id, revision }: { id: string; revision: number }) {
     </div>
   );
 }
-export function ConceptContent({ concept: c }: { concept: Concept }) {
+export function ConceptContent({
+  concept: c,
+  excludeDefinition,
+}: {
+  concept: Concept;
+  excludeDefinition?: LiteralValue;
+}) {
+  const definitions = c.definitions.filter(
+    (d) =>
+      d.value !== excludeDefinition?.value ||
+      d.language !== excludeDefinition?.language,
+  );
   return (
     <>
       <div className="concept-labels">
         <Literals values={c.labels} />
       </div>
-      {c.definitions.length > 0 && (
+      {definitions.length > 0 && (
         <div className="definitions">
-          <Literals values={c.definitions} />
+          <Literals values={definitions} />
         </div>
       )}
       <h4>Translations &amp; synonyms</h4>
@@ -133,14 +145,23 @@ export function ConceptContent({ concept: c }: { concept: Concept }) {
     </>
   );
 }
-function SenseCard({ sense: s, index }: { sense: Sense; index: number }) {
+export function SenseCard({
+  sense: s,
+  index,
+}: {
+  sense: Sense;
+  index: number;
+}) {
+  const definition = s.concept.definitions.find((d) => d.language === "en");
   return (
     <article className="sense-card">
       <div className="sense-heading">
         <span className="sense-number">
           {String(index + 1).padStart(2, "0")}
         </span>
-        <h2>{s.concept.label || "Concept not recorded"}</h2>
+        <h2>
+          {definition?.value || s.concept.label || "Concept not recorded"}
+        </h2>
         <div className="chips">
           {s.level ? (
             <span className="badge green">{s.level.label}</span>
@@ -152,7 +173,7 @@ function SenseCard({ sense: s, index }: { sense: Sense; index: number }) {
           )}
         </div>
       </div>
-      <ConceptContent concept={s.concept} />
+      <ConceptContent concept={s.concept} excludeDefinition={definition} />
       {s.examples.length > 0 && (
         <div className="examples">
           <h4>Examples</h4>
@@ -385,7 +406,7 @@ export default function EntryDetails({
                         <h4>
                           {(
                             {
-                              similarGlyph: "Similar spelling",
+                              similarGlyph: "Similar written form",
                               similarMeaning: "Similar meaning / usage",
                               similarSound: "Same pronunciation",
                             } as Record<string, string>
@@ -419,7 +440,11 @@ export default function EntryDetails({
                         onClick={() => setSelectedChar(c.iri)}
                       >
                         <strong lang="zh">{c.label}</strong>
-                        <small>Character {i + 1} ↗</small>
+                        <small>
+                          {c.definitions.find((d) => d.language === "en")
+                            ?.value || `Character ${i + 1}`}{" "}
+                          ↗
+                        </small>
                       </button>
                     ))}
                   </div>

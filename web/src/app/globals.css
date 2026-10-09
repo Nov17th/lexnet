@@ -876,6 +876,10 @@ td code {
 td strong {
   font-weight: 500;
 }
+.coverage-cell > strong,
+.coverage-cell > small {
+  display: block;
+}
 .coverage-bar {
   height: 3px;
   background: #edf1e8;
@@ -918,6 +922,10 @@ td strong {
 .sample-selector {
   max-width: 440px;
   margin-bottom: 20px;
+}
+.sample-selector select {
+  width: 100%;
+  max-width: 100%;
 }
 .editor-label {
   margin-bottom: 10px;

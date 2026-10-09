@@ -53,7 +53,7 @@ export type Sense = {
 export type Entry = Word & {
   senses: Sense[];
   confusables: (Word & { predicate: string; predicateLabel: string })[];
-  characters: Entity[];
+  characters: (Entity & { definitions: LiteralValue[] })[];
   lexemes: string[];
 };
 export type Character = Entity & {
@@ -121,8 +121,16 @@ export type AudioResult = {
     mime: string;
     representation: string;
     source: string;
+    label: string;
+    filename: string;
   }[];
   message?: string;
+};
+export type QuerySample = {
+  id: string;
+  title: string;
+  query: string;
+  federated: boolean;
 };
 export type QueryResult =
   | { kind: "SELECT"; variables: string[]; rows: Row[]; truncated: boolean }

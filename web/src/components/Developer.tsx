@@ -2,7 +2,13 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import type { QueryResult, Stats, Word, Coverage } from "@/lib/types";
+import type {
+  QueryResult,
+  QuerySample,
+  Stats,
+  Word,
+  Coverage,
+} from "@/lib/types";
 import { api, ErrorBox, Loading, useRemote } from "./common";
 import QueryTable from "./QueryTable";
 const GraphExplorer = dynamic(() => import("./GraphExplorer"), {
@@ -36,7 +42,7 @@ const percentage = (c: Coverage) =>
   c.ratio === null ? "N/A" : `${(c.ratio * 100).toFixed(1)}%`;
 function CoverageCell({ coverage: c }: { coverage: Coverage }) {
   return (
-    <div title={c.population}>
+    <div className="coverage-cell" title={c.population}>
       <strong>{percentage(c)}</strong>
       <small>
         {c.numerator} / {c.denominator}
@@ -154,8 +160,20 @@ function Overview({ revision }: { revision: number }) {
     </>
   );
 }
-function Console({ openGraph }: { openGraph: (iri: string) => void }) {
+function Console({
+  openGraph,
+  revision,
+}: {
+  openGraph: (iri: string) => void;
+  revision: number;
+}) {
   const [query, setQuery] = useState(samples[0].query);
+  const [chosen, setChosen] = useState("builtin-0");
+  const [reload, setReload] = useState(0);
+  const demos = useRemote<QuerySample[]>(
+    "/api/query-samples",
+    revision + reload,
+  );
   const [result, setResult] = useState<QueryResult | null>(null);
   const [error, setError] = useState("");
   const [running, setRunning] = useState(false);
@@ -203,16 +221,47 @@ function Console({ openGraph }: { openGraph: (iri: string) => void }) {
       <label className="sample-selector">
         Sample query
         <select
-          onChange={(e) => setQuery(samples[Number(e.target.value)].query)}
-          defaultValue="0"
+          onChange={(e) => {
+            const id = e.target.value;
+            const sample = id.startsWith("builtin-")
+              ? samples[Number(id.slice("builtin-".length))]
+              : demos.data?.find((s) => s.id === id);
+            if (sample) {
+              setQuery(sample.query);
+              setChosen(id);
+            }
+          }}
+          value={
+            chosen.startsWith("builtin-") ||
+            demos.data?.some((s) => s.id === chosen)
+              ? chosen
+              : ""
+          }
         >
-          {samples.map((s, i) => (
-            <option key={s.title} value={i}>
-              {s.title}
-            </option>
-          ))}
+          <option value="" disabled>
+            Custom query
+          </option>
+          <optgroup label="LexNet demo queries">
+            {demos.data?.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.title}
+                {s.federated ? " · Wikidata" : ""}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Basic queries">
+            {samples.map((s, i) => (
+              <option key={s.title} value={`builtin-${i}`}>
+                {s.title}
+              </option>
+            ))}
+          </optgroup>
         </select>
       </label>
+      {demos.loading && <p className="muted">Loading LexNet demo queries…</p>}
+      {demos.error && (
+        <ErrorBox error={demos.error} retry={() => setReload((r) => r + 1)} />
+      )}
       <label className="editor-label" htmlFor="sparql-query">
         Query editor
       </label>
@@ -220,7 +269,10 @@ function Console({ openGraph }: { openGraph: (iri: string) => void }) {
         id="sparql-query"
         className="query-editor"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setChosen("");
+        }}
         spellCheck={false}
       />
       <div className="query-actions">
@@ -374,7 +426,9 @@ export default function Developer() {
       {tab === "graph" && (
         <GraphExplorer key={id + "|" + revision} initialIri={id} />
       )}{" "}
-      {tab === "sparql" && <Console openGraph={openGraph} />}{" "}
+      {tab === "sparql" && (
+        <Console openGraph={openGraph} revision={revision} />
+      )}{" "}
       {tab === "derived" && <Derived initialIri={id} revision={revision} />}
     </div>
   );

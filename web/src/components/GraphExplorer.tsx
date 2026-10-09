@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type cytoscape from "cytoscape";
 import type { Graph, Word } from "@/lib/types";
@@ -12,6 +12,10 @@ const palette: Record<string, string> = {
   Form: "#8f67ab",
   "Han character": "#d0715d",
   Radical: "#ba6395",
+  Topic: "#8a8a2e",
+  "Proficiency level": "#2f8f9d",
+  "Usage example": "#9aa29d",
+  "Part of speech": "#7d6f5f",
 };
 export default function GraphExplorer({ initialIri }: { initialIri: string }) {
   const [focus, setFocus] = useState(initialIri);
@@ -25,6 +29,13 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
   const [fallback, setFallback] = useState(false);
   const container = useRef<HTMLDivElement>(null);
   const cy = useRef<cytoscape.Core | null>(null);
+  const selection = useRef("");
+  const selectNode = useCallback((id: string) => {
+    selection.current = id;
+    setSelected(id);
+    cy.current?.nodes().unselect();
+    if (id) cy.current?.getElementById(id).select();
+  }, []);
   const result = useRemote<Graph>(
     focus
       ? `/api/graph?${new URLSearchParams({ iri: focus, depth: String(depth) })}`
@@ -43,7 +54,7 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
     import("cytoscape")
       .then(({ default: cytoscape }) => {
         if (cancelled || !container.current) return;
-        cy.current = cytoscape({
+        const instance = (cy.current = cytoscape({
           container: container.current,
           elements: [
             ...data.nodes.map((n) => ({
@@ -68,9 +79,13 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
               },
             },
             {
+              selector: 'node[type = "Lexical sense"]',
+              style: { label: "", width: 16, height: 16 },
+            },
+            {
               selector: "edge",
               style: {
-                label: "data(label)",
+                label: "",
                 width: 1.3,
                 "line-color": "#ced8d3",
                 "target-arrow-color": "#aebeb5",
@@ -84,19 +99,50 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
               },
             },
             {
-              selector: ":selected",
+              selector: ".labels-visible",
+              style: { label: "data(label)" },
+            },
+            {
+              selector: "node:selected",
               style: { "border-width": 3, "border-color": "#172f27" },
             },
           ],
           layout: {
             name: "cose",
             animate: false,
-            nodeRepulsion: () => 8000,
-            idealEdgeLength: () => 110,
+            nodeRepulsion: () => 30000,
+            idealEdgeLength: () => 140,
+            nodeOverlap: 20,
+            padding: 30,
           },
           wheelSensitivity: 0.2,
+        }));
+        let hovered = instance.collection();
+        const showLabels = () => {
+          instance.elements().removeClass("labels-visible");
+          const highlighted = instance.nodes(":selected").union(hovered);
+          highlighted
+            .union(highlighted.connectedEdges())
+            .addClass("labels-visible");
+        };
+        instance.on("mouseover", "node", (e) => {
+          hovered = e.target;
+          showLabels();
         });
-        cy.current.on("tap", "node", (e) => setSelected(e.target.id()));
+        instance.on("mouseout", "node", () => {
+          hovered = instance.collection();
+          showLabels();
+        });
+        instance.on("select unselect", "node", showLabels);
+        instance.on("tap", "node", (e) => selectNode(e.target.id()));
+        instance.on("tap", (e) => {
+          if (e.target === instance) selectNode("");
+        });
+        selectNode(
+          instance.getElementById(selection.current).length
+            ? selection.current
+            : "",
+        );
       })
       .catch(() => setFallback(true));
     return () => {
@@ -104,7 +150,7 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
       cy.current?.destroy();
       cy.current = null;
     };
-  }, [data]);
+  }, [data, selectNode]);
   async function expand() {
     if (!selected || !data) return;
     setBusy(true);
@@ -177,7 +223,7 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
           onClick={() => {
             setCombined(null);
             setRevision((r) => r + 1);
-            setSelected("");
+            selectNode("");
           }}
         >
           Reset
@@ -213,7 +259,7 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
                 setFocus(w.iri);
                 setCombined(null);
                 setInput("");
-                setSelected("");
+                selectNode("");
               }}
             >
               {w.writtenRep} · {w.language} ·{" "}
@@ -316,7 +362,7 @@ export default function GraphExplorer({ initialIri }: { initialIri: string }) {
                       <td>
                         <button
                           className="text-button"
-                          onClick={() => setSelected(n.id)}
+                          onClick={() => selectNode(n.id)}
                         >
                           Select
                         </button>

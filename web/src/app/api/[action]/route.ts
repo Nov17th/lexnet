@@ -3,6 +3,7 @@ import * as repo from "@/lib/repositories";
 import { integer, config, prefixes } from "@/lib/namespaces";
 import { consoleQuery, upstream, UpstreamError } from "@/lib/sparqlClient";
 import { audio } from "@/lib/wikidataClient";
+import { querySamples } from "@/lib/querySamples";
 import {
   polysemyQuery,
   sharedQuery,
@@ -59,6 +60,8 @@ export async function GET(
         return response(await repo.concept(id()));
       case "topics":
         return response(await repo.topics());
+      case "query-samples":
+        return response(await querySamples());
       case "levels":
         return response(
           (await repo.levels()).filter(

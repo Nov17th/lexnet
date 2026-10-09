@@ -31,7 +31,11 @@ export function selectAudioCandidates(
       )
     )
       continue;
-    const extension = audioUrl.pathname.split(".").pop()?.toLowerCase();
+    let filename = audioUrl.pathname.split("/").pop() || "Audio recording";
+    try {
+      filename = decodeURIComponent(filename);
+    } catch {}
+    const extension = filename.split(".").pop()?.toLowerCase();
     const mime =
       (
         {
@@ -45,15 +49,30 @@ export function selectAudioCandidates(
         } as Record<string, string>
       )[extension || ""] || "";
     audioUrl.protocol = "https:";
-    if (!result.some((c) => c.url === audioUrl.href))
+    const label = r.varietyLabel?.value || filename;
+    const existing = result.find((c) => c.url === audioUrl.href);
+    if (existing && r.varietyLabel) {
+      existing.label =
+        existing.label === existing.filename
+          ? label
+          : [...new Set([...existing.label.split(" · "), label])].join(" · ");
+    }
+    if (!existing)
       result.push({
         url: audioUrl.href,
         mime,
         representation: rep,
         source: r.lexeme.value,
+        label,
+        filename,
       });
   }
-  return result;
+  const priority = (label: string) =>
+    /\b(?:American English|General American)\b/iu.test(label) ? 0 : 1;
+  return result.sort(
+    (a, b) =>
+      priority(a.label) - priority(b.label) || a.label.localeCompare(b.label),
+  );
 }
 export async function audio(id: string): Promise<AudioResult> {
   if (process.env.WIKIDATA_ENABLED === "false")
@@ -79,7 +98,7 @@ export async function audio(id: string): Promise<AudioResult> {
   const request = (async () => {
     let result: AudioResult;
     try {
-      const query = `PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#> PREFIX wdt: <http://www.wikidata.org/prop/direct/> SELECT DISTINCT ?lexeme ?representation ?audio WHERE { VALUES ?lexeme { ${lexemes.map((l) => `<${l.replace("https:", "http:")}>`).join(" ")} } ?lexeme ontolex:lexicalForm ?form . ?form ontolex:representation ?representation ; wdt:P443 ?audio . FILTER(LANG(?representation)=${literal(e.language)}) }`;
+      const query = `PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#> PREFIX p: <http://www.wikidata.org/prop/> PREFIX ps: <http://www.wikidata.org/prop/statement/> PREFIX pq: <http://www.wikidata.org/prop/qualifier/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX wikibase: <http://wikiba.se/ontology#> SELECT DISTINCT ?lexeme ?representation ?audio ?varietyLabel WHERE { VALUES ?lexeme { ${lexemes.map((l) => `<${l.replace("https:", "http:")}>`).join(" ")} } ?lexeme ontolex:lexicalForm ?form . ?form ontolex:representation ?representation ; p:P443 ?statement . ?statement ps:P443 ?audio . FILTER NOT EXISTS { ?statement wikibase:rank wikibase:DeprecatedRank } OPTIONAL { ?statement pq:P5237 ?variety . ?variety rdfs:label ?varietyLabel . FILTER(LANG(?varietyLabel)="en") } FILTER(LANG(?representation)=${literal(e.language)}) }`;
       const response = await fetch(
         process.env.WIKIDATA_ENDPOINT || "https://query.wikidata.org/sparql",
         {

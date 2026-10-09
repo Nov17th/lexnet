@@ -20,6 +20,10 @@ import {
   polysemyQuery,
 } from "../src/lib/queryBuilders";
 import { selectAudioCandidates } from "../src/lib/wikidataClient";
+import { parseQuerySamples, querySamples } from "../src/lib/querySamples";
+import { mkdtemp, writeFile, unlink, rmdir } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import type { Row } from "../src/lib/types";
 const uri = (value: string) => ({ type: "uri" as const, value });
 const text = (value: string, language?: string) => ({
@@ -174,6 +178,7 @@ test("audio adapter selects exact lexical form, preserves MIME, deduplicates and
   );
   assert.equal(candidates.length, 1);
   assert.equal(candidates[0].mime, "audio/ogg");
+  assert.equal(candidates[0].label, "En-dog.ogg");
   assert.equal(
     selectAudioCandidates(
       [
@@ -188,4 +193,64 @@ test("audio adapter selects exact lexical form, preserves MIME, deduplicates and
     )[0].mime,
     "audio/wav",
   );
+});
+
+test("audio labels use pronunciation qualifiers, prefer American English and upgrade duplicate unqualified rows", () => {
+  const row = (file: string, variety?: string): Row => ({
+    representation: text("bank", "en"),
+    audio: uri(`http://commons.wikimedia.org/wiki/Special:FilePath/${file}`),
+    lexeme: uri("http://www.wikidata.org/entity/L3354"),
+    ...(variety ? { varietyLabel: text(variety, "en") } : {}),
+  });
+  const candidates = selectAudioCandidates(
+    [
+      row("En-uk-bank.ogg", "British English"),
+      row("En-us-bank.ogg"),
+      row("En-us-bank.ogg", "American English"),
+      row("En-us-bank.ogg", "American English"),
+      row("Bank%20pronunciation.wav"),
+    ],
+    "bank",
+    "en",
+  );
+  assert.equal(candidates.length, 3);
+  assert.equal(candidates[0].label, "American English");
+  assert.ok(candidates.some((c) => c.label === "British English"));
+  assert.ok(candidates.some((c) => c.label === "Bank pronunciation.wav"));
+  assert.ok(candidates.every((c) => c.source.endsWith("/L3354")));
+});
+
+test("repository query samples keep all 18 headers, prefixes and three federated queries", () => {
+  const samples = parseQuerySamples(
+    readFileSync("../queries/queries.rq", "utf8"),
+  );
+  assert.equal(samples.length, 18);
+  assert.equal(samples.filter((s) => s.federated).length, 3);
+  assert.equal(new Set(samples.map((s) => s.id)).size, 18);
+  for (const s of samples)
+    assert.equal(new Parser().parse(s.query).type, "query");
+  const inherited = parseQuerySamples(
+    "PREFIX ex: <http://example.org/>\r\n# --- 1) Shared prefixes\r\nSELECT ?x WHERE { ?x ex:p ?o }",
+  );
+  assert.equal(inherited[0].title, "1) Shared prefixes");
+  assert.equal(new Parser().parse(inherited[0].query).type, "query");
+});
+
+test("query sample loader re-reads the file and reports a missing source", async () => {
+  const scratch = await mkdtemp(join(tmpdir(), "lexnet-query-samples-"));
+  const file = join(scratch, "queries.rq");
+  const previous = process.env.LEXNET_QUERIES_FILE;
+  try {
+    process.env.LEXNET_QUERIES_FILE = file;
+    await writeFile(file, "# --- 1) First\nASK {}");
+    assert.equal((await querySamples())[0].title, "1) First");
+    await writeFile(file, "# --- 2) Changed\nASK {}");
+    assert.equal((await querySamples())[0].title, "2) Changed");
+    await unlink(file);
+    await assert.rejects(querySamples, /Cannot read demo queries/);
+  } finally {
+    if (previous === undefined) delete process.env.LEXNET_QUERIES_FILE;
+    else process.env.LEXNET_QUERIES_FILE = previous;
+    await rmdir(scratch);
+  }
 });

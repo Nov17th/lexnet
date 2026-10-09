@@ -2,6 +2,8 @@
 
 A read-only dictionary and graph explorer for the LexNet English, Vietnamese and Chinese knowledge graph. The browser calls the Next.js API, which queries a Fuseki SPARQL endpoint at runtime.
 
+For recording the project demonstration, see the Vietnamese [demo script](DEMO.md), with a 4-minute-20-second walkthrough, narration and fallback steps.
+
 ## Features
 
 - Search words, inspect senses, translations, synonyms, proficiency levels and examples.
@@ -9,7 +11,7 @@ A read-only dictionary and graph explorer for the LexNet English, Vietnamese and
 - Browse topics and filter senses by language and proficiency rank.
 - View dataset counts, coverage, bounded graph neighborhoods and results derived by SPARQL.
 - Run SELECT, ASK, CONSTRUCT and DESCRIBE queries in the SPARQL console. Updates are rejected by both the app and the supplied Fuseki launcher.
-- Retrieve pronunciation audio on demand from linked Wikidata lexemes. This uses a separate Wikidata request; local dictionary queries do not depend on Wikidata availability.
+- Retrieve pronunciation audio on demand from linked Wikidata lexemes, with pronunciation-variety labels when supplied and American English listed first. This uses a separate Wikidata request; local dictionary queries do not depend on Wikidata availability.
 
 ## Requirements
 
@@ -60,6 +62,7 @@ SPARQL_ENDPOINT=http://localhost:3030/lexnet/query
 LEXNET_RESOURCE_BASE="https://nov17th.github.io/lexnet/build/lexnet-full.ttl#"
 LEXNET_SCHEMA_IRI="https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl#"
 LEXNET_RDF_FILE=../build/lexnet-full.ttl
+LEXNET_QUERIES_FILE=../queries/queries.rq
 ```
 
 Keep quotes around namespace values containing `#`, so environment-file parsers preserve the fragment delimiter. Internal links encode the complete resource IRI in the URL query string.
@@ -67,6 +70,10 @@ Keep quotes around namespace values containing `#`, so environment-file parsers 
 GitHub Pages publishes the [RDF dataset](https://nov17th.github.io/lexnet/build/lexnet-full.ttl) and [ontology](https://nov17th.github.io/lexnet/ontology/lexnet-ontology.ttl). The Next.js server and Fuseki run separately; publishing this source folder on Pages does not run either service.
 
 After updating or rebuilding the RDF, stop and restart Fuseki, then refresh the app. Restart the web server when changing endpoint or namespace configuration. Levels and relations are displayed as recorded in the loaded RDF; the app does not run an OWL reasoner.
+
+The SPARQL console reads the 18 demo queries from `../queries/queries.rq` at runtime alongside four basic query examples. Titles come from the numbered comment headers. Use **Refresh data** to reload the list after editing that file; the editor keeps your current query. Federated examples are marked Wikidata and depend on the external endpoint. The query file must remain available when running the server.
+
+Sense headings use English concept definitions when available. Han character buttons show English character meanings; word pronunciation stays with the complete word. In the graph, edge labels and small sense-node labels appear on hover or selection, with selection also available from the node table.
 
 ## Checks and production
 
@@ -84,7 +91,7 @@ With the web application and Fuseki running, use `npm run test:integration`. The
 
 External audio availability depends on Wikidata and Wikimedia. Browser layout, keyboard interaction, graph controls and actual audio playback should also be checked manually before recording a demo.
 
-Verified in this repository layout: lint, production build, TypeScript, 9 contract tests and 18 integration groups passed. Development startup and search also passed. The runtime dependency audit reported no vulnerabilities; the full audit reported five high findings in development lint dependencies.
+Verified in this repository layout: lint, production build, TypeScript, 13 tests and 20 integration groups passed. This includes graph sense labels, character meanings, pronunciation-variety ordering, query-file reloads, all 18 sample-query syntaxes and execution of the 15 local samples through the console API. Development startup and search also passed. The runtime dependency audit reported no vulnerabilities; the full audit reported five high findings in development lint dependencies.
 
 ## Source layout
 

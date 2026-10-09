@@ -15,6 +15,7 @@ import type {
   AudioResult,
   Entity,
   Level,
+  QuerySample,
 } from "../src/lib/types";
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 const app = process.env.TEST_APP_URL || "http://127.0.0.1:3000";
@@ -251,6 +252,38 @@ await check(
   },
 );
 await check(
+  "review: readable graph sense labels and English character meanings",
+  async () => {
+    const bank = await entry("bank");
+    const graph = await api<Graph>("graph", { iri: bank.iri, depth: "1" });
+    for (const s of bank.senses) {
+      const definition = s.definitions.find((d) => d.language === "en")?.value;
+      const node = graph.nodes.find((n) => n.id === s.iri);
+      assert.equal(node?.label, `bank · ${definition || s.concept.label}`);
+    }
+    const compound = await entry("白色");
+    assert.deepEqual(
+      compound.characters.map(
+        (c) => c.definitions.find((d) => d.language === "en")?.value,
+      ),
+      ["white", "color"],
+    );
+  },
+);
+await check(
+  "review: 18 file-backed query samples and 15 local queries run through the console API",
+  async () => {
+    const samples = await api<QuerySample[]>("query-samples");
+    assert.equal(samples.length, 18);
+    assert.equal(samples.filter((s) => s.federated).length, 3);
+    for (const sample of samples.filter((s) => !s.federated)) {
+      const result = (await sparql(sample.query)).result;
+      assert.equal(result.kind, "SELECT");
+      if (result.kind === "SELECT") assert.ok(result.rows.length, sample.title);
+    }
+  },
+);
+await check(
   "SELECT / ASK / CONSTRUCT / DESCRIBE results remain typed",
   async () => {
     assert.equal(
@@ -323,7 +356,7 @@ await check("application pages render and ship source-based UI", async () => {
     assert.match(await r.text(), /LexNet/);
   }
 });
-for (const q of ["dog", "人", "bánh mì"]) {
+for (const q of ["dog", "人", "bánh mì", "bank"]) {
   const r = await api<AudioResult>("audio", { iri: (await word(q)).iri });
   assert.ok(
     ["available", "unavailable", "error", "disabled"].includes(r.status),
@@ -332,6 +365,11 @@ for (const q of ["dog", "人", "bánh mì"]) {
     `EXTERNAL AUDIO ${q}: ${r.status}${r.message ? " — " + r.message : ""}`,
   );
   if (r.status === "available") {
+    assert.ok(r.candidates.every((c) => c.label && c.filename));
+    if (q === "bank")
+      console.log(
+        `EXTERNAL AUDIO VARIETIES: ${r.candidates.map((c) => c.label).join(", ")}`,
+      );
     // A successful file fetch still does not assert successful browser playback.
     try {
       const file = await fetch(r.candidates[0].url, {
