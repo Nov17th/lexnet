@@ -16,7 +16,7 @@ LexNet is a Linked Open Data resource for Vietnamese learners of English and Chi
 | Word | `ontolex:LexicalEntry`, `ontolex:LexicalSense`, `ontolex:Form` | `ontolex:evokes`, `ontolex:sense`, `lexnet:level`, `lexnet:register`, `lexnet:hasExample`, `lexnet:confusableWith` |
 | Script | `lexnet:HanCharacter`, `lexnet:Radical` | `lexnet:hasCharacter`, `lexnet:hasRadical`, `lexnet:reading`, `lexnet:similarCharacter` |
 
-- The ontology is OWL 2 DL (expressivity ALCROIQ(D), checked with the OWL API profile checker). It reuses OntoLex-Lemon, SKOS and LexInfo, declaring their terms exactly as the official vocabularies do.
+- The ontology is OWL 2 DL (expressivity ALCROIQ(D), checked with the OWL API profile checker in `scripts/ProfileCheck.java`). It reuses OntoLex-Lemon, SKOS and LexInfo, declaring their terms exactly as the official vocabularies do.
 - A reasoner infers polysemous words (`lexnet:PolysemousEntry`, two or more senses), translations and synonyms (`lexnet:sharesConceptWith`, the chain `evokes ∘ evokes⁻¹`) and the symmetric parent relation `confusableWith`. Disjoint node types, domains, ranges and `owl:AllDifferent` make it reject mistyped or conflicting data.
 - Levels (CEFR, HSK 3.0) and topics are SKOS concept schemes. A level belongs to a sense, not a word: *bank* is A1 as a financial institution and B1 as the side of a river.
 - Concepts link to Wikidata items (`skos:exactMatch`, `skos:closeMatch`) and words to Wikidata lexemes (`owl:sameAs`). Audio recordings are fetched from the lexemes with federated SPARQL.
@@ -41,6 +41,7 @@ scripts/    import_sheet.py            copies the team spreadsheet (.xlsx) into 
             lookup_wikidata.py         suggests Wikidata links for review
             build_hanzi_data.py        rebuilds data/hanzi-unihan.tsv from Unihan
             en_ipa.py                  English IPA from the CMU Pronouncing Dictionary
+            ProfileCheck.java          checks the OWL 2 profiles (DL, EL, QL, RL) with the OWL API
             candidates_to_rows.py      turns picked concept candidates into spreadsheet rows
 queries/    queries.rq                 18 demo SPARQL queries, 3 of them federated with Wikidata
 web/                                  Next.js dictionary, graph explorer and SPARQL interface
@@ -62,6 +63,7 @@ python3 scripts/import_sheet.py LexNet-data.xlsx     # refresh data/ from the sp
 python3 scripts/csv_to_ttl.py                        # build the knowledge graph
 python3 scripts/check_build.py                       # PASS/FAIL per check, about 2 minutes
 python3 scripts/report_stats.py [--online]           # numbers for the report (--online: also Wikidata coverage)
+java -cp <owlapi jar> scripts/ProfileCheck.java build/lexnet-full.ttl   # OWL 2 profiles; see the file header
 fuseki-server --file build/lexnet-full.ttl /lexnet   # SPARQL endpoint at http://localhost:3030
 ```
 
