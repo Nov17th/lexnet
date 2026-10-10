@@ -110,6 +110,7 @@ await check(
   async () => {
     assert.deepEqual(await search("mèo"), await search("mèo"));
     assert.equal((await search("CAT"))[0].iri, (await search("cat"))[0].iri);
+    assert.equal((await search("Mèo"))[0].iri, (await search("mèo"))[0].iri);
     assert.deepEqual(await search('" } UNION { ?s ?p ?o } #'), []);
   },
 );

@@ -37,13 +37,15 @@ export function useRemote<T>(url: string | null, revision = 0) {
 export function ErrorBox({
   error,
   retry,
+  title = "Unable to load data",
 }: {
   error: string;
   retry?: () => void;
+  title?: string;
 }) {
   return (
     <div role="alert" className="error-box">
-      <strong>Unable to load data</strong>
+      <strong>{title}</strong>
       <p>{error}</p>
       {retry && (
         <button className="button secondary" onClick={retry}>

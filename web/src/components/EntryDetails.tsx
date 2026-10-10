@@ -38,7 +38,9 @@ function Audio({ id, revision }: { id: string; revision: number }) {
         <span className="muted">Checking pronunciation audio…</span>
       )}
       {(result.error || result.data?.status === "error") && (
-        <span className="muted">External audio lookup unavailable.</span>
+        <span className="muted">
+          Pronunciation audio is temporarily unavailable.
+        </span>
       )}
       {playable?.map((c) => (
         <div key={c.url}>
@@ -57,9 +59,6 @@ function Audio({ id, revision }: { id: string; revision: number }) {
         </div>
       ))}
       {error && <p role="alert">{error}</p>}
-      {result.data?.status === "unavailable" && (
-        <span className="muted">{result.data.message}</span>
-      )}
       {result.data?.status === "available" && !playable?.length && (
         <span className="muted">
           Audio exists, but its format is unsupported in this browser.
@@ -163,11 +162,7 @@ export function SenseCard({
           {definition?.value || s.concept.label || "Concept not recorded"}
         </h2>
         <div className="chips">
-          {s.level ? (
-            <span className="badge green">{s.level.label}</span>
-          ) : (
-            <span className="badge">Level not recorded</span>
-          )}
+          {s.level && <span className="badge green">{s.level.label}</span>}
           {s.register && (
             <span className="badge amber">{s.register.label}</span>
           )}
@@ -398,21 +393,16 @@ export default function EntryDetails({
                 <section className="panel">
                   <h2>Words to tell apart</h2>
                   <p className="muted">
-                    Connections recorded in the source, in either direction.
+                    Words that learners often mix up with this one.
                   </p>
                   {[...new Set(e.confusables.map((c) => c.predicate))].map(
                     (p) => (
                       <div className="confusable-group" key={p}>
                         <h4>
-                          {(
-                            {
-                              similarGlyph: "Similar written form",
-                              similarMeaning: "Similar meaning / usage",
-                              similarSound: "Same pronunciation",
-                            } as Record<string, string>
-                          )[p.split("#").pop()!] ||
+                          {
                             e.confusables.find((c) => c.predicate === p)
-                              ?.predicateLabel}
+                              ?.predicateLabel
+                          }
                         </h4>
                         <div className="chips">
                           {e.confusables

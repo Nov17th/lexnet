@@ -289,7 +289,7 @@ function Console({
         )}
         {elapsed !== null && <span className="muted">{elapsed} ms</span>}
       </div>
-      {error && <ErrorBox error={error} />}{" "}
+      {error && <ErrorBox title="Query error" error={error} />}{" "}
       {result && <QueryTable result={result} onResource={openGraph} />}
     </section>
   );
