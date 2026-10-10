@@ -11,40 +11,40 @@
     lab/.style={font=\ttfamily\scriptsize, fill=white, inner sep=1pt},
   ]
   % meaning and word layer
-  \node[own]    (concept) at (5,4)      {Concept};
-  \node[reused] (entry)   at (0,2)      {LexicalEntry};
-  \node[reused] (sense)   at (5,2)      {LexicalSense};
-  \node[reused] (form)    at (0,0)      {Form\\[-1pt]{\scriptsize\ttfamily writtenRep, phoneticRep}};
+  \node[own]    (concept) at (5.6,4)    {Concept\\[-1pt]{\scriptsize\ttfamily skos:prefLabel}};
+  \node[reused] (entry)   at (0,2)      {LexicalEntry\\[-1pt]{\scriptsize\ttfamily lexinfo:partOfSpeech}};
+  \node[reused] (sense)   at (5.6,2)    {LexicalSense};
+  \node[reused] (form)    at (0,0)      {Form\\[-1pt]{\scriptsize\ttfamily ontolex:writtenRep,}\\[-2pt]{\scriptsize\ttfamily ontolex:phoneticRep}};
   % script layer
   \node[own]    (char)    at (0,-2)     {HanCharacter\\[-1pt]{\scriptsize\ttfamily reading, strokeCount}};
-  \node[own]    (rad)     at (5,-2)     {Radical};
+  \node[own]    (rad)     at (5.6,-2)   {Radical\\[-1pt]{\scriptsize\ttfamily radicalNumber, variantForm}};
   % learner layer and topics
-  \node[own]    (topic)   at (10.2,4)   {ThematicDomain};
-  \node[own]    (level)   at (10.2,2.6) {ProficiencyLevel\\[-1pt]{\scriptsize CEFR, HSK 3.0}};
-  \node[own]    (reg)     at (10.2,1.3) {Register};
-  \node[own]    (ex)      at (10.2,0)   {UsageExample};
+  \node[own]    (topic)   at (10.8,4)   {ThematicDomain};
+  \node[own]    (level)   at (10.8,2.6) {ProficiencyLevel\\[-1pt]{\scriptsize\ttfamily rank}};
+  \node[own]    (reg)     at (10.8,1.3) {Register};
+  \node[own]    (ex)      at (10.8,0)   {UsageExample};
   % external
-  \node[ext]    (wditem)  at (5,5.7)    {Wikidata item};
+  \node[ext]    (wditem)  at (5.6,5.7)  {Wikidata item};
   \node[ext]    (wdlex)   at (0,3.9)    {Wikidata lexeme};
 
   \draw[rel] (entry) -- node[lab, sloped, above] {ontolex:evokes} (concept);
   \draw[rel] (entry) -- node[lab, above] {ontolex:sense} (sense);
-  \draw[rel] (sense) -- node[lab, right] {isLexicalizedSenseOf} (concept);
-  \draw[rel] (entry) -- node[lab, right] {canonicalForm} (form);
+  \draw[rel] (sense) -- node[lab, right, align=left] {ontolex:\\isLexicalizedSenseOf} (concept);
+  \draw[rel] (entry) -- node[lab, right] {ontolex:canonicalForm} (form);
   \draw[rel] (form)  -- node[lab, right] {hasCharacter} (char);
   \draw[rel] (char)  -- node[lab, above] {hasRadical} (rad);
   \draw[rel] (concept) -- node[lab, above] {inDomain} (topic);
   \draw[rel] (sense.east) -- node[lab, above, sloped] {level} (level.west);
   \draw[rel] (sense.east) -- node[lab, above, sloped, pos=0.55] {register} (reg.west);
   \draw[rel] (sense.east) -- node[lab, below, sloped, pos=0.6] {hasExample} (ex.west);
-  \draw[extrel] (concept) -- node[lab, right] {skos:exactMatch / closeMatch} (wditem);
+  \draw[extrel] (concept) -- node[lab, right] {skos:exactMatch / skos:closeMatch} (wditem);
   \draw[extrel] (entry) -- node[lab, right] {owl:sameAs} (wdlex);
 
   % relations from a class to itself
   \draw[rel] (concept.north west) .. controls +(-1.6,1.1) and +(-1.9,0.1) .. (concept.west)
       node[lab, pos=0.25, left=2pt, align=right] {skos:broader, partMeronym,\\ antonym};
   \draw[rel] (entry.south west) .. controls +(-1.4,-0.6) and +(-1.6,0.3) .. (entry.west)
-      node[lab, pos=0.5, left=4pt, align=right] {confusableWith\\(similarGlyph,\\ Meaning, Sound)};
+      node[lab, pos=0.5, left=4pt, align=right] {confusableWith\\(similarGlyph,\\ similarMeaning,\\ similarSound)};
   \draw[rel] (char.south west) .. controls +(-1.4,-0.6) and +(-1.6,0.3) .. (char.west)
       node[lab, pos=0.5, left=4pt] {similarCharacter};
 \end{tikzpicture}%
