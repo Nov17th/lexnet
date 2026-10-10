@@ -100,6 +100,11 @@ export function WordLink({ word }: { word: Word }) {
       lang={word.language}
     >
       {word.writtenRep}
+      {word.meanings?.length ? (
+        <span className="chip-meaning" lang="en">
+          {word.meanings.join("; ")}
+        </span>
+      ) : null}
       <small>
         {word.pos.map((p) => p.label).join(", ")}
         {word.register ? ` · ${word.register.label}` : ""}

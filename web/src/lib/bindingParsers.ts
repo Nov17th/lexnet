@@ -65,6 +65,18 @@ export function words(rows: Row[]): Word[] {
         register: r.register
           ? entity(value(r, "register"), labels(rs, "registerLabel"))
           : undefined,
+        ...(rs.some((x) => x.meaning)
+          ? {
+              meanings: unique(
+                labels(rs, "meaning")
+                  .map((m) => m.value)
+                  .filter(
+                    (m) =>
+                      m.toLowerCase() !== value(r, "written").toLowerCase(),
+                  ),
+              ),
+            }
+          : {}),
       };
     }),
   );

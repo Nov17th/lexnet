@@ -160,6 +160,36 @@ test("console adds undeclared standard prefixes once and leaves declared ones al
   assert.doesNotThrow(() => parseReadQuery(query));
   assert.equal(withPrefixes("ASK { ?s ?p ?o }"), "ASK { ?s ?p ?o }");
 });
+test("search and confusable queries return one English meaning per sense, not the word itself", () => {
+  for (const query of [
+    searchQuery("năm", "auto", 20),
+    confusablesQuery(config.base + "entry/zh_卖_verb"),
+  ])
+    assert.doesNotThrow(() => new Parser().parse(prefixes + "\n" + query));
+  const rows: Row[] = [
+    {
+      entry: uri("e1"),
+      form: uri("f1"),
+      written: text("năm", "vi"),
+      meaning: text("year", "en"),
+    },
+    {
+      entry: uri("e1"),
+      form: uri("f1"),
+      written: text("năm", "vi"),
+      meaning: text("five", "en"),
+    },
+    {
+      entry: uri("e2"),
+      form: uri("f2"),
+      written: text("cat", "en"),
+      meaning: text("cat", "en"),
+    },
+  ];
+  const [nam, cat] = words(rows);
+  assert.deepEqual(nam.meanings, ["year", "five"]);
+  assert.deepEqual(cat.meanings, []);
+});
 test("audio adapter selects exact lexical form, preserves MIME, deduplicates and refuses unrelated hosts", () => {
   const row = (representation: string, url: string, language = "en"): Row => ({
     representation: text(representation, language),

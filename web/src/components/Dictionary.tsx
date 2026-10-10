@@ -152,6 +152,11 @@ export default function Dictionary() {
                       <span aria-hidden>↗</span>
                     </div>
                     <h3 lang={w.language}>{w.writtenRep}</h3>
+                    {w.meanings?.length ? (
+                      <p className="meaning" lang="en">
+                        {w.meanings.join("; ")}
+                      </p>
+                    ) : null}
                     <p>
                       {w.pos.map((p) => p.label).join(" · ") ||
                         "Part of speech not recorded"}

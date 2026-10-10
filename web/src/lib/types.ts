@@ -27,6 +27,8 @@ export type Word = {
   senseIri?: string;
   register?: Entity;
   level?: Level;
+  /** English meanings (definition, else concept label) when the query asks for them. */
+  meanings?: string[];
 };
 export type Relation = Entity & {
   kind: string;

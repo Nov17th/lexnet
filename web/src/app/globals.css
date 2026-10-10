@@ -653,6 +653,16 @@ footer strong {
   color: #96a38d;
   font-size: 10px;
 }
+/* English meaning next to a word or concept, e.g. "năm · year". */
+.word-chip .chip-meaning {
+  color: var(--ink);
+  font-size: 12px;
+}
+.result-card p.meaning {
+  font-size: 14px;
+  color: var(--ink);
+  margin-top: 4px;
+}
 .relationships {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

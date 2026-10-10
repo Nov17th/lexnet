@@ -15,6 +15,7 @@ import {
   levelFields,
   searchQuery,
   confusablesQuery,
+  meaningFields,
 } from "./queryBuilders";
 import type {
   Character,
@@ -230,7 +231,7 @@ export async function character(id: string, page = 1): Promise<Character> {
       `SELECT DISTINCT ?character ?label WHERE { ${resource(id)} (lexnet:similarCharacter|^lexnet:similarCharacter) ?character . FILTER(?character!=${resource(id)}) OPTIONAL { ?character rdfs:label ?label } }`,
     ),
     select(
-      `SELECT ?entry ?form ?written ?phonetic ?pos ?posLabel WHERE { { SELECT DISTINCT ?entry WHERE { ?entry ontolex:canonicalForm/lexnet:hasCharacter ${resource(id)} } ORDER BY ?entry LIMIT 25 OFFSET ${(page - 1) * 24} } ${wordFields} }`,
+      `SELECT ?entry ?form ?written ?phonetic ?pos ?posLabel ?meaning WHERE { { SELECT DISTINCT ?entry WHERE { ?entry ontolex:canonicalForm/lexnet:hasCharacter ${resource(id)} } ORDER BY ?entry LIMIT 25 OFFSET ${(page - 1) * 24} } ${wordFields} ${meaningFields} }`,
     ),
     select(
       `SELECT DISTINCT ?character ?label WHERE { ${resource(id)} lexnet:hasRadical ?radical . ?character lexnet:hasRadical ?radical . FILTER(?character!=${resource(id)}) OPTIONAL { ?character rdfs:label ?label } } ORDER BY ?character LIMIT 25 OFFSET ${(page - 1) * 24}`,
