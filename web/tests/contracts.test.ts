@@ -9,6 +9,7 @@ import {
   iri,
   resource,
   prefixes,
+  withPrefixes,
 } from "../src/lib/namespaces";
 import { detailRoute } from "../src/lib/resourceRoutes";
 import { labels, entity, words, group, level } from "../src/lib/bindingParsers";
@@ -147,6 +148,17 @@ test("derived query builders parse and use actual sense paths and both direction
   assert.match(sharedQuery(id), /ontolex:sense\/ontolex:isLexicalizedSenseOf/);
   assert.match(confusablesQuery(id), /UNION/);
   assert.match(polysemyQuery, /COUNT\(DISTINCT \?sense\)/);
+});
+test("console adds undeclared standard prefixes once and leaves declared ones alone", () => {
+  const query = withPrefixes(
+    "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nSELECT ?w WHERE { concept:cat skos:prefLabel ?w . ?e ontolex:sense/^ontolex:sense ?s }",
+  );
+  assert.equal((query.match(/PREFIX skos:/g) || []).length, 1);
+  assert.match(query, /PREFIX concept: <[^>]+concept\/>/);
+  assert.match(query, /PREFIX ontolex: /);
+  assert.doesNotMatch(query, /PREFIX lexnet:/);
+  assert.doesNotThrow(() => parseReadQuery(query));
+  assert.equal(withPrefixes("ASK { ?s ?p ?o }"), "ASK { ?s ?p ?o }");
 });
 test("audio adapter selects exact lexical form, preserves MIME, deduplicates and refuses unrelated hosts", () => {
   const row = (representation: string, url: string, language = "en"): Row => ({

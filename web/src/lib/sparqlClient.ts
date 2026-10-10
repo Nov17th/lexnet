@@ -1,6 +1,6 @@
 import { Parser } from "sparqljs";
 import { Parser as RdfParser } from "n3";
-import { config, prefixes } from "./namespaces";
+import { config, prefixes, withPrefixes } from "./namespaces";
 import type { Binding, QueryResult, Row } from "./types";
 export class UpstreamError extends Error {
   constructor(
@@ -64,6 +64,7 @@ export async function consoleQuery(
   query: string,
   signal?: AbortSignal,
 ): Promise<QueryResult> {
+  query = withPrefixes(query);
   const ast = parseReadQuery(query);
   const kind = ast.queryType;
   if (kind !== "ASK") {

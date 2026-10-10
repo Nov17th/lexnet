@@ -262,6 +262,10 @@ function Console({
       {demos.error && (
         <ErrorBox error={demos.error} retry={() => setReload((r) => r + 1)} />
       )}
+      <p className="muted">
+        Standard prefixes (lexnet:, ontolex:, skos:, concept:, entry:…) are
+        added automatically when a query uses them without declaring them.
+      </p>
       <label className="editor-label" htmlFor="sparql-query">
         Query editor
       </label>

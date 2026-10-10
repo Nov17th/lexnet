@@ -20,6 +20,37 @@ export const ns = {
   rdfs: "http://www.w3.org/2000/01/rdf-schema#",
   owl: "http://www.w3.org/2002/07/owl#",
 };
+/** Prefixes the SPARQL console adds when a query uses them without declaring them, as in queries/queries.rq. */
+export const consolePrefixes: Record<string, string> = {
+  ...ns,
+  xsd: "http://www.w3.org/2001/XMLSchema#",
+  dct: "http://purl.org/dc/terms/",
+  wd: "http://www.wikidata.org/entity/",
+  wdt: "http://www.wikidata.org/prop/direct/",
+  concept: config.base + "concept/",
+  entry: config.base + "entry/",
+  sense: config.base + "sense/",
+  form: config.base + "form/",
+  char: config.base + "char/",
+  topic: config.base + "topic/",
+  radical: config.base + "radical/",
+  level: config.schema + "level/",
+};
+export function withPrefixes(query: string) {
+  const declared = new Set(
+    [...query.matchAll(/PREFIX\s+([A-Za-z][\w-]*)?\s*:/giu)].map(
+      (m) => m[1] || "",
+    ),
+  );
+  const missing = Object.entries(consolePrefixes).filter(
+    ([name]) =>
+      !declared.has(name) &&
+      new RegExp(`(^|[\\s(/^|,;{}!])${name}:`, "mu").test(query),
+  );
+  return missing.length
+    ? missing.map(([k, v]) => `PREFIX ${k}: <${v}>`).join("\n") + "\n" + query
+    : query;
+}
 export const prefixes = Object.entries(ns)
   .map(([k, v]) => `PREFIX ${k}: <${v}>`)
   .join("\n");

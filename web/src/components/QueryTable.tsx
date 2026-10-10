@@ -30,11 +30,15 @@ function Cell({
         {b["xml:lang"] ? ` · @${b["xml:lang"]}` : ""}
         {b.datatype ? ` · ${b.datatype}` : ""}
       </small>
-      {onResource && b.type === "uri" && (
-        <button className="text-button" onClick={() => onResource(b.value)}>
-          Graph ↗
-        </button>
-      )}
+      {onResource &&
+        b.type === "uri" &&
+        /[/#](entry|concept|char|sense|form|topic|radical|example)\//u.test(
+          b.value,
+        ) && (
+          <button className="text-button" onClick={() => onResource(b.value)}>
+            Graph ↗
+          </button>
+        )}
     </span>
   );
 }
