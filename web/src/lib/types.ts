@@ -34,13 +34,15 @@ export type Relation = Entity & {
   kind: string;
   predicate: string;
   predicateLabel: string;
+  /** English definition that tells concepts with the same label apart. */
+  definition?: string;
 };
 export type Concept = Entity & {
   definitions: LiteralValue[];
   topics: Entity[];
   words: Word[];
   relations: Relation[];
-  matches: { iri: string; kind: string }[];
+  matches: { iri: string; kind: string; label: string }[];
 };
 export type Sense = {
   iri: string;

@@ -82,13 +82,18 @@ export function Literals({ values }: { values: LiteralValue[] }) {
 export function EntityLink({
   entity,
   type = "concept",
+  note,
 }: {
   entity: Entity;
   type?: string;
+  /** Shown after the label, e.g. the definition that tells two "child" concepts apart. */
+  note?: string;
 }) {
   return (
     <Link className="word-chip" href={route(type, entity.iri)}>
-      {entity.label} <span aria-hidden>↗</span>
+      {entity.label}
+      {note && <span className="chip-meaning">{note}</span>}{" "}
+      <span aria-hidden>↗</span>
     </Link>
   );
 }

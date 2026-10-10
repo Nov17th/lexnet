@@ -44,6 +44,15 @@ const entityMeta = (id: string, rs: Row[]) =>
     ...literals(rs, ns.skos + "prefLabel"),
     ...literals(rs, ns.rdfs + "label"),
   ]);
+/** English rdfs:label of each property, keyed by full IRI (e.g. "exact match" for skos:exactMatch). */
+async function propertyLabels(properties: string[]) {
+  const rows = await select(
+    `SELECT ?property ?label WHERE { VALUES ?property { ${properties.join(" ")} } ?property rdfs:label ?label . FILTER(LANG(?label)="en") }`,
+  );
+  return Object.fromEntries(
+    rows.map((r) => [value(r, "property"), value(r, "label")]),
+  );
+}
 export async function search(q: string, language = "auto", limit = 20) {
   return words(await select(searchQuery(q, language, limit)));
 }
@@ -74,8 +83,12 @@ export async function concept(id: string): Promise<Concept> {
       `SELECT DISTINCT ?entry ?form ?written ?phonetic ?pos ?posLabel ?sense ?level ?levelLabel ?notation ?scheme ?schemeLabel ?rank ?register ?registerLabel WHERE { ?entry ontolex:sense ?sense . ?sense ontolex:isLexicalizedSenseOf ${resource(id)} . ${wordFields} ${levelFields} } ORDER BY ?entry ?sense`,
     ),
     select(
-      `SELECT DISTINCT ?kind ?predicate ?predicateLabel ?other ?label WHERE { VALUES ?origin { ${resource(id)} } { ?origin skos:broader ?other . BIND("Hypernyms" AS ?kind) BIND(skos:broader AS ?predicate) } UNION { ?other skos:broader ?origin . BIND("Hyponyms" AS ?kind) BIND(skos:broader AS ?predicate) } UNION { { ?origin lexnet:partMeronym ?other } UNION { ?other lexnet:partHolonym ?origin } BIND("Parts" AS ?kind) BIND(lexnet:partMeronym AS ?predicate) } UNION { { ?other lexnet:partMeronym ?origin } UNION { ?origin lexnet:partHolonym ?other } BIND("Part of" AS ?kind) BIND(lexnet:partHolonym AS ?predicate) } UNION { ?origin (lexnet:antonym|^lexnet:antonym) ?other . BIND("Antonyms" AS ?kind) BIND(lexnet:antonym AS ?predicate) } FILTER(?other!=?origin) OPTIONAL { ?other skos:prefLabel ?label } OPTIONAL { ?predicate rdfs:label ?predicateLabel } }`,
+      `SELECT DISTINCT ?kind ?predicate ?predicateLabel ?other ?label ?definition WHERE { VALUES ?origin { ${resource(id)} } { ?origin skos:broader ?other . BIND("Hypernyms" AS ?kind) BIND(skos:broader AS ?predicate) } UNION { ?other skos:broader ?origin . BIND("Hyponyms" AS ?kind) BIND(skos:broader AS ?predicate) } UNION { { ?origin lexnet:partMeronym ?other } UNION { ?other lexnet:partHolonym ?origin } BIND("Parts" AS ?kind) BIND(lexnet:partMeronym AS ?predicate) } UNION { { ?other lexnet:partMeronym ?origin } UNION { ?origin lexnet:partHolonym ?other } BIND("Part of" AS ?kind) BIND(lexnet:partHolonym AS ?predicate) } UNION { ?origin (lexnet:antonym|^lexnet:antonym) ?other . BIND("Antonyms" AS ?kind) BIND(lexnet:antonym AS ?predicate) } FILTER(?other!=?origin) OPTIONAL { ?other skos:prefLabel ?label } OPTIONAL { ?other skos:definition ?definition . FILTER(LANG(?definition)="en") } OPTIONAL { ?predicate rdfs:label ?predicateLabel } }`,
     ),
+  ]);
+  const matchLabels = await propertyLabels([
+    "skos:exactMatch",
+    "skos:closeMatch",
   ]);
   if (!details.length) throw new Error("Concept not found");
   const topicIds = objects(details, ns.lexnet + "inDomain").map((b) => b.value);
@@ -95,16 +108,21 @@ export async function concept(id: string): Promise<Concept> {
           labels(ors, "predicateLabel"),
           value(ors[0], "predicate"),
         ),
+        ...(value(ors[0], "definition")
+          ? { definition: value(ors[0], "definition") }
+          : {}),
       })),
     ),
     matches: [
       ...objects(details, ns.skos + "exactMatch").map((b) => ({
         iri: b.value,
         kind: "exactMatch",
+        label: matchLabels[ns.skos + "exactMatch"] || "exactMatch",
       })),
       ...objects(details, ns.skos + "closeMatch").map((b) => ({
         iri: b.value,
         kind: "closeMatch",
+        label: matchLabels[ns.skos + "closeMatch"] || "closeMatch",
       })),
     ],
   };

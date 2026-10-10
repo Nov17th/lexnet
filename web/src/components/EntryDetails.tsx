@@ -109,18 +109,22 @@ export function ConceptContent({
         <div className="relationships">
           {["Hypernyms", "Hyponyms", "Parts", "Part of", "Antonyms"]
             .filter((kind) => c.relations.some((r) => r.kind === kind))
-            .map((kind) => (
-              <div key={kind}>
-                <h4>{kind}</h4>
-                <div className="chips">
-                  {c.relations
-                    .filter((r) => r.kind === kind)
-                    .map((r) => (
-                      <EntityLink key={r.iri} entity={r} />
+            .map((kind) => {
+              const rs = c.relations.filter((r) => r.kind === kind);
+              return (
+                <div key={kind}>
+                  {/* Headings are the ontology labels; skos:broader has no inverse property in the data, so its other direction keeps the SKOS name. */}
+                  <h4>
+                    {kind === "Hyponyms" ? "narrower" : rs[0].predicateLabel}
+                  </h4>
+                  <div className="chips">
+                    {rs.map((r) => (
+                      <EntityLink key={r.iri} entity={r} note={r.definition} />
                     ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </div>
       )}
       <details className="technical-details">
@@ -128,10 +132,7 @@ export function ConceptContent({
         <code>{c.iri}</code>
         {c.matches.map((m) => (
           <p key={m.iri + m.kind}>
-            <strong>
-              {m.kind === "exactMatch" ? "Exact match" : "Close match"}
-            </strong>{" "}
-            ·{" "}
+            <strong>{m.label}</strong> ·{" "}
             <a href={m.iri} target="_blank" rel="noreferrer">
               {m.iri}
             </a>
