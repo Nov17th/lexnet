@@ -16,6 +16,7 @@ const palette: Record<string, string> = {
   "Proficiency level": "#2f8f9d",
   "Usage example": "#9aa29d",
   "Part of speech": "#7d6f5f",
+  Wikidata: "#1d3557",
 };
 export default function GraphExplorer({ initialIri }: { initialIri: string }) {
   const [focus, setFocus] = useState(initialIri);

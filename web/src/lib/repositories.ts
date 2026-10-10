@@ -469,7 +469,11 @@ const graphPredicates = [
   "lexnet:partMeronym",
   "lexnet:partHolonym",
   "skos:broader",
+  "skos:exactMatch",
+  "skos:closeMatch",
+  "owl:sameAs",
 ];
+const wikidata = "http://www.wikidata.org/entity/";
 export async function graph(
   id: string,
   depth = 1,
@@ -498,10 +502,12 @@ export async function graph(
       iri: id,
       expandable: id.startsWith(config.base) || id.startsWith(config.schema),
       label: preferred(labels(rs, labelKey), id),
-      type: preferred(
-        labels(rs, typeKey + "Label"),
-        value(rs[0], typeKey) || "Resource",
-      ),
+      type: id.startsWith(wikidata)
+        ? "Wikidata"
+        : preferred(
+            labels(rs, typeKey + "Label"),
+            value(rs[0], typeKey) || "Resource",
+          ),
     });
     if (rs.some((r) => value(r, typeKey) === ns.ontolex + "LexicalSense"))
       senseIds.add(id);
@@ -577,6 +583,19 @@ export async function graph(
         value(rs.find((r) => r.definition) || {}, "definition") ||
         preferred(labels(rs, "conceptLabel"), "");
       node.label = [word, meaning].filter(Boolean).join(" · ") || node.label;
+    }
+  }
+  // Concepts that share a label (the two "bank" concepts) are told apart by their definition.
+  const conceptIds = [...nodes.values()]
+    .filter((n) => n.type === "Concept")
+    .map((n) => n.id);
+  if (conceptIds.length) {
+    const defs = await select(
+      `SELECT ?concept ?definition WHERE { VALUES ?concept { ${conceptIds.map(resource).join(" ")} } ?concept skos:definition ?definition . FILTER(LANG(?definition)="en") }`,
+    );
+    for (const r of defs) {
+      const node = nodes.get(value(r, "concept"));
+      if (node) node.label = `${node.label} · ${value(r, "definition")}`;
     }
   }
   return {
