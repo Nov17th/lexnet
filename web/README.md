@@ -2,7 +2,6 @@
 
 A read-only dictionary and graph explorer for the LexNet English, Vietnamese and Chinese knowledge graph. The browser calls the Next.js API, which queries a Fuseki SPARQL endpoint at runtime.
 
-For recording the project demonstration, see the Vietnamese [demo script](DEMO.md), with a 4-minute-20-second walkthrough, narration and fallback steps.
 
 ## Features
 
