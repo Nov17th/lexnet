@@ -128,7 +128,7 @@ export async function concept(id: string): Promise<Concept> {
   };
 }
 export async function entry(id: string): Promise<Entry> {
-  const [ws, ss, cr, chars, details] = await Promise.all([
+  const [ws, ss, cr, chars, details, alike, alikeLabel] = await Promise.all([
     select(
       `SELECT ?entry ?form ?written ?pos ?posLabel ?phonetic WHERE { VALUES ?entry { ${resource(id)} } ?entry a ontolex:LexicalEntry . ${wordFields} }`,
     ),
@@ -140,6 +140,10 @@ export async function entry(id: string): Promise<Entry> {
       `SELECT ?character ?label ?definition WHERE { ${resource(id)} ontolex:canonicalForm/lexnet:hasCharacter ?character . OPTIONAL { ?character rdfs:label ?label } OPTIONAL { ?character skos:definition ?definition . FILTER(LANG(?definition)="en") } }`,
     ),
     meta(id),
+    select(
+      `SELECT DISTINCT ?character ?characterLabel ?similar ?similarLabel ?definition WHERE { ${resource(id)} ontolex:canonicalForm/lexnet:hasCharacter ?character . ?character (lexnet:similarCharacter|^lexnet:similarCharacter) ?similar . FILTER(?similar!=?character) OPTIONAL { ?character rdfs:label ?characterLabel } OPTIONAL { ?similar rdfs:label ?similarLabel } OPTIONAL { ?similar skos:definition ?definition . FILTER(LANG(?definition)="en") } } ORDER BY ?character ?similar`,
+    ),
+    propertyLabels(["lexnet:similarCharacter"]),
   ]);
   const w = words(ws)[0];
   if (!w) throw new Error("Entry not found");
@@ -174,16 +178,51 @@ export async function entry(id: string): Promise<Entry> {
     ...entity(c, labels(rs)),
     definitions: labels(rs, "definition"),
   }));
+  const confusables = [...group(cr, "predicate")].flatMap(([p, rs]) =>
+    words(rs).map((w) => ({
+      ...w,
+      predicate: p,
+      predicateLabel: preferred(labels(rs, "predicateLabel"), p),
+    })),
+  );
+  // A look-alike character that is also a look-alike word (买/卖) is listed once, as a word.
+  const glyphWords = new Set(
+    confusables
+      .filter((c) => c.predicate === ns.lexnet + "similarGlyph")
+      .map((c) => c.writtenRep),
+  );
+  const lookAlikes = [
+    ...group(
+      alike.map((r) => ({
+        ...r,
+        key: {
+          type: "literal" as const,
+          value: value(r, "character") + " " + value(r, "similar"),
+        },
+      })),
+      "key",
+    ).values(),
+  ]
+    .filter((rs) => !glyphWords.has(value(rs[0], "similarLabel")))
+    .map((rs) => ({
+      character: entity(
+        value(rs[0], "character"),
+        labels(rs, "characterLabel"),
+      ),
+      similar: {
+        ...entity(value(rs[0], "similar"), labels(rs, "similarLabel")),
+        ...(value(rs[0], "definition")
+          ? { definition: value(rs[0], "definition") }
+          : {}),
+      },
+    }));
   return {
     ...w,
     senses,
-    confusables: [...group(cr, "predicate")].flatMap(([p, rs]) =>
-      words(rs).map((w) => ({
-        ...w,
-        predicate: p,
-        predicateLabel: preferred(labels(rs, "predicateLabel"), p),
-      })),
-    ),
+    confusables,
+    lookAlikes,
+    lookAlikeLabel:
+      alikeLabel[ns.lexnet + "similarCharacter"] || "look-alike character",
     characters: [...w.writtenRep].flatMap((ch) =>
       allChars.filter(
         (c) => c.labels.some((l) => l.value === ch) || c.label === ch,
@@ -244,7 +283,7 @@ export async function character(id: string, page = 1): Promise<Character> {
       };
     }),
   );
-  const [similar, ws, peers] = await Promise.all([
+  const [similar, ws, peers, similarLabel] = await Promise.all([
     select(
       `SELECT DISTINCT ?character ?label WHERE { ${resource(id)} (lexnet:similarCharacter|^lexnet:similarCharacter) ?character . FILTER(?character!=${resource(id)}) OPTIONAL { ?character rdfs:label ?label } }`,
     ),
@@ -254,6 +293,7 @@ export async function character(id: string, page = 1): Promise<Character> {
     select(
       `SELECT DISTINCT ?character ?label WHERE { ${resource(id)} lexnet:hasRadical ?radical . ?character lexnet:hasRadical ?radical . FILTER(?character!=${resource(id)}) OPTIONAL { ?character rdfs:label ?label } } ORDER BY ?character LIMIT 25 OFFSET ${(page - 1) * 24}`,
     ),
+    propertyLabels(["lexnet:similarCharacter"]),
   ]);
   const wordList = words(ws);
   return {
@@ -272,6 +312,8 @@ export async function character(id: string, page = 1): Promise<Character> {
     similar: [...group(similar, "character")].map(([c, rs]) =>
       entity(c, labels(rs)),
     ),
+    similarLabel:
+      similarLabel[ns.lexnet + "similarCharacter"] || "look-alike character",
     words: wordList.slice(0, 24),
     radicalPeers: [...group(peers, "character")]
       .slice(0, 24)

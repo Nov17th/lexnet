@@ -58,6 +58,12 @@ export type Entry = Word & {
   senses: Sense[];
   confusables: (Word & { predicate: string; predicateLabel: string })[];
   characters: (Entity & { definitions: LiteralValue[] })[];
+  /** Look-alike characters of the characters in this word (lexnet:similarCharacter, both directions). */
+  lookAlikes: {
+    character: Entity;
+    similar: Entity & { definition?: string };
+  }[];
+  lookAlikeLabel: string;
   lexemes: string[];
 };
 export type Character = Entity & {
@@ -71,6 +77,7 @@ export type Character = Entity & {
     definitions: LiteralValue[];
   })[];
   similar: Entity[];
+  similarLabel: string;
   words: Word[];
   radicalPeers: Entity[];
   page: number;

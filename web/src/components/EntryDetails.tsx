@@ -252,7 +252,7 @@ export function CharacterDetails({
               <Literals values={r.definitions} />
             </div>
           ))}
-          <h4>Similar characters</h4>
+          <h4>{c.similarLabel}</h4>
           <div className="chips">
             {c.similar.length ? (
               c.similar.map((s) => (
@@ -390,11 +390,12 @@ export default function EntryDetails({
                   <SenseCard key={s.iri} sense={s} index={i} />
                 ))}
               </div>
-              {e.confusables.length > 0 && (
+              {(e.confusables.length > 0 || e.lookAlikes.length > 0) && (
                 <section className="panel">
                   <h2>Words to tell apart</h2>
                   <p className="muted">
-                    Words that learners often mix up with this one.
+                    Words and characters that learners often mix up with this
+                    one.
                   </p>
                   {[...new Set(e.confusables.map((c) => c.predicate))].map(
                     (p) => (
@@ -414,6 +415,28 @@ export default function EntryDetails({
                         </div>
                       </div>
                     ),
+                  )}
+                  {e.lookAlikes.length > 0 && (
+                    <div className="confusable-group">
+                      <h4>{e.lookAlikeLabel}</h4>
+                      <div className="chips">
+                        {e.lookAlikes.map((a) => (
+                          <Link
+                            key={a.character.iri + a.similar.iri}
+                            className="word-chip"
+                            href={route("character", a.similar.iri)}
+                            lang="zh"
+                          >
+                            {a.character.label} ↔ {a.similar.label}
+                            {a.similar.definition && (
+                              <span className="chip-meaning" lang="en">
+                                {a.similar.definition}
+                              </span>
+                            )}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </section>
               )}
