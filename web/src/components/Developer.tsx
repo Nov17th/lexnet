@@ -9,7 +9,7 @@ import type {
   Word,
   Coverage,
 } from "@/lib/types";
-import { api, ErrorBox, Loading, useRemote } from "./common";
+import { api, ErrorBox, Loading, languageName, useRemote } from "./common";
 import QueryTable from "./QueryTable";
 const GraphExplorer = dynamic(() => import("./GraphExplorer"), {
   ssr: false,
@@ -41,6 +41,14 @@ const samples = [
 const percentage = (c: Coverage) =>
   c.ratio === null ? "N/A" : `${(c.ratio * 100).toFixed(1)}%`;
 function CoverageCell({ coverage: c }: { coverage: Coverage }) {
+  // Nothing recorded, e.g. Vietnamese levels, which LexNet does not collect: no empty 0% bar.
+  if (c.numerator === 0)
+    return (
+      <div className="coverage-cell" title={c.population}>
+        <strong>—</strong>
+        <small>none recorded</small>
+      </div>
+    );
   return (
     <div className="coverage-cell" title={c.population}>
       <strong>{percentage(c)}</strong>
@@ -94,7 +102,7 @@ function Overview({ revision }: { revision: number }) {
                 <tbody>
                   {result.data.languages.map((l) => (
                     <tr key={l.language}>
-                      <td>{l.language}</td>
+                      <td>{languageName(l.language)}</td>
                       <td>{l.entries}</td>
                       <td>{l.senses}</td>
                       <td>{l.writtenForms}</td>
@@ -118,17 +126,15 @@ function Overview({ revision }: { revision: number }) {
                 <div className="match-row" key={kind}>
                   <span>
                     {kind === "either"
-                      ? "Exact or close match"
-                      : kind === "exactMatch"
-                        ? "Exact match"
-                        : "Close match"}
+                      ? `${result.data!.matchLabels.exactMatch} or ${result.data!.matchLabels.closeMatch}`
+                      : result.data!.matchLabels[kind] || kind}
                   </span>
                   <CoverageCell coverage={c} />
                 </div>
               ))}
               <p className="muted">
-                A link records the source mapping; it does not establish
-                independent verification.
+                Concepts linked to a Wikidata item by skos:exactMatch or
+                skos:closeMatch.
               </p>
             </section>
             <section className="panel">

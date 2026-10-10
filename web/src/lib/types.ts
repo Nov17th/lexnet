@@ -103,6 +103,8 @@ export type Stats = {
   }[];
   topics: (Entity & { entries: number; senses: number })[];
   matches: Record<string, Coverage>;
+  /** Ontology labels of skos:exactMatch and skos:closeMatch. */
+  matchLabels: Record<string, string>;
 };
 export type GraphNode = {
   id: string;

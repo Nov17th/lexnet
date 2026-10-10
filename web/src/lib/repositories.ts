@@ -263,8 +263,8 @@ export async function browse(params: {
       })),
     ),
     levelNote: params.scheme
-      ? "Only matching sense levels are included; unspecified levels are excluded unless selected."
-      : "Levels are recorded per sense; unspecified levels remain unspecified.",
+      ? "Only meanings with a level in the chosen framework are shown, unless you include meanings without a level."
+      : "Each meaning of a word has its own level.",
   };
 }
 export async function character(id: string, page = 1): Promise<Character> {
@@ -447,7 +447,20 @@ export async function stats(): Promise<Stats> {
       }),
     ),
   );
-  return { counts, languages, topics: topicStats, matches };
+  const matchLabels = await propertyLabels([
+    "skos:exactMatch",
+    "skos:closeMatch",
+  ]);
+  return {
+    counts,
+    languages,
+    topics: topicStats,
+    matches,
+    matchLabels: {
+      exactMatch: matchLabels[ns.skos + "exactMatch"] || "exactMatch",
+      closeMatch: matchLabels[ns.skos + "closeMatch"] || "closeMatch",
+    },
+  };
 }
 const graphPredicates = [
   "ontolex:sense",

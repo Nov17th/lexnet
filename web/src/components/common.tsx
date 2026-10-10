@@ -97,6 +97,8 @@ export function EntityLink({
     </Link>
   );
 }
+export const plural = (n: number, one: string, many = one + "s") =>
+  `${n.toLocaleString()} ${n === 1 ? one : many}`;
 export function WordLink({ word }: { word: Word }) {
   return (
     <Link

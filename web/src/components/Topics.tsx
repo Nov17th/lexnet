@@ -9,6 +9,7 @@ import {
   Empty,
   WordLink,
   languageName,
+  plural,
   route,
 } from "./common";
 import Link from "next/link";
@@ -161,10 +162,7 @@ export default function Topics() {
       {result.data && (
         <>
           <div className="section-heading">
-            <h2>
-              {result.data.total} entry{" "}
-              {result.data.total === 1 ? "sense" : "senses"}
-            </h2>
+            <h2>{plural(result.data.total, "word sense")}</h2>
             <span className="muted">Page {page}</span>
           </div>
           <p className="muted">{result.data.levelNote}</p>
@@ -199,8 +197,8 @@ export default function Topics() {
               ← Previous
             </button>
             <span>
-              {result.data.total} {result.data.total === 1 ? "sense" : "senses"}{" "}
-              · {result.data.pageSize} per page
+              {plural(result.data.total, "sense")} · {result.data.pageSize} per
+              page
             </span>
             <button
               className="button secondary"
