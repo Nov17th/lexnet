@@ -1,51 +1,62 @@
-% Ontology overview (TikZ), used in the ontology design section.
+% Ontology figure (TikZ and a table), used in the ontology design section.
+% (a) Classes only: an unlabelled arrow is rdfs:subClassOf, as in the course notation.
+% (b) Properties are not drawn between classes; their domains and ranges are listed instead.
+\usetikzlibrary{shapes.geometric}
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[
-    every node/.style={font=\sffamily\small},
-    cls/.style={draw, rounded corners=2pt, minimum width=2.9cm, minimum height=0.75cm, align=center},
-    reused/.style={cls, fill=black!8},
+    every node/.style={font=\sffamily\footnotesize},
+    cls/.style={draw, ellipse, inner xsep=-2pt, inner ysep=0pt, minimum width=1.9cm, minimum height=0.7cm, align=center},
+    reused/.style={cls, fill=black!20},
     own/.style={cls, fill=blue!10, draw=blue!50!black},
-    ext/.style={cls, dashed, draw=black!60, text=black!70},
-    rel/.style={-{Stealth[length=2.2mm]}, thick, black!75},
-    extrel/.style={rel, dashed},
-    lab/.style={font=\ttfamily\scriptsize, fill=white, inner sep=1pt},
+    defined/.style={own, double, double distance=1.2pt},
+    sub/.style={-{Triangle[open, length=2.6mm, width=2.6mm]}, thick, black!75},
+    inferred/.style={sub, dashed},
+    note/.style={font=\sffamily\scriptsize, align=left, text=black!85},
   ]
-  % meaning and word layer
-  \node[own]    (concept) at (5.6,4)    {Concept\\[-1pt]{\scriptsize\ttfamily skos:prefLabel}};
-  \node[reused] (entry)   at (0,2)      {LexicalEntry\\[-1pt]{\scriptsize\ttfamily lexinfo:partOfSpeech}};
-  \node[reused] (sense)   at (5.6,2)    {LexicalSense};
-  \node[reused] (form)    at (0,0)      {Form\\[-1pt]{\scriptsize\ttfamily ontolex:writtenRep,}\\[-2pt]{\scriptsize\ttfamily ontolex:phoneticRep}};
-  % script layer
-  \node[own]    (char)    at (0,-2)     {HanCharacter\\[-1pt]{\scriptsize\ttfamily reading, strokeCount}};
-  \node[own]    (rad)     at (5.6,-2)   {Radical\\[-1pt]{\scriptsize\ttfamily radicalNumber, variantForm}};
-  % learner layer and topics
-  \node[own]    (topic)   at (10.8,4)   {ThematicDomain};
-  \node[own]    (level)   at (10.8,2.6) {ProficiencyLevel\\[-1pt]{\scriptsize\ttfamily rank}};
-  \node[own]    (reg)     at (10.8,1.3) {Register};
-  \node[own]    (ex)      at (10.8,0)   {UsageExample};
-  % external
-  \node[ext]    (wditem)  at (5.6,5.7)  {Wikidata item};
-  \node[ext]    (wdlex)   at (0,3.9)    {Wikidata lexeme};
-
-  \draw[rel] (entry) -- node[lab, sloped, above] {ontolex:evokes} (concept);
-  \draw[rel] (entry) -- node[lab, above] {ontolex:sense} (sense);
-  \draw[rel] (sense) -- node[lab, right, align=left] {ontolex:\\isLexicalizedSenseOf} (concept);
-  \draw[rel] (entry) -- node[lab, right] {ontolex:canonicalForm} (form);
-  \draw[rel] (form)  -- node[lab, right] {hasCharacter} (char);
-  \draw[rel] (char)  -- node[lab, above] {hasRadical} (rad);
-  \draw[rel] (concept) -- node[lab, above] {inDomain} (topic);
-  \draw[rel] (sense.east) -- node[lab, above, sloped] {level} (level.west);
-  \draw[rel] (sense.east) -- node[lab, above, sloped, pos=0.55] {register} (reg.west);
-  \draw[rel] (sense.east) -- node[lab, below, sloped, pos=0.6] {hasExample} (ex.west);
-  \draw[extrel] (concept) -- node[lab, right] {skos:exactMatch / skos:closeMatch} (wditem);
-  \draw[extrel] (entry) -- node[lab, right] {owl:sameAs} (wdlex);
-
-  % relations from a class to itself
-  \draw[rel] (concept.north west) .. controls +(-1.6,1.1) and +(-1.9,0.1) .. (concept.west)
-      node[lab, pos=0.25, left=2pt, align=right] {skos:broader, partMeronym,\\ antonym};
-  \draw[rel] (entry.south west) .. controls +(-1.4,-0.6) and +(-1.6,0.3) .. (entry.west)
-      node[lab, pos=0.5, left=4pt, align=right] {confusableWith\\(similarGlyph,\\ similarMeaning,\\ similarSound)};
-  \draw[rel] (char.south west) .. controls +(-1.4,-0.6) and +(-1.6,0.3) .. (char.west)
-      node[lab, pos=0.5, left=4pt] {similarCharacter};
+  \node[font=\sffamily\small, anchor=north west] at (-2.3,2.75) {(a)};
+  % classes outside the disjoint group
+  \node[reused] (skos)   at (3.5,2.25)   {skos:Concept};
+  \node[reused] (lexc)   at (0,1.12)     {ontolex:LexicalConcept};
+  \node[reused] (pos)    at (9.6,2.25)   {lexinfo:PartOfSpeech};
+  \node[reused] (scheme) at (13.9,2.25)  {skos:ConceptScheme};
+  % the ten pairwise disjoint classes
+  \node[own]    (concept) at (0,0)      {Concept};
+  \node[own]    (topic)   at (3.5,0)    {ThematicDomain};
+  \node[own]    (level)   at (7.0,0)    {ProficiencyLevel};
+  \node[own]    (reg)     at (10.5,0)   {Register};
+  \node[own]    (ex)      at (14.0,0)   {UsageExample};
+  \node[reused] (entry)   at (1.2,-1.15) {ontolex:LexicalEntry};
+  \node[reused] (sense)   at (5.3,-1.15) {ontolex:LexicalSense};
+  \node[reused] (form)    at (8.9,-1.15) {ontolex:Form};
+  \node[own]    (char)    at (11.9,-1.15){HanCharacter};
+  \node[own]    (rad)     at (14.6,-1.15){Radical};
+  \node[draw, dashed, rounded corners=4pt, inner sep=4pt, fit=(concept)(ex)(entry)(rad)] (frame) {};
+  \node[note, anchor=north east] at (frame.south east) {pairwise disjoint};
+  % defined class and restrictions
+  \node[defined] (poly) at (1.2,-2.45) {PolysemousEntry};
+  \node[note, anchor=west] at (2.8,-2.45) {$\equiv$ ontolex:LexicalEntry $\sqcap$ ${\geq}2\,$ontolex:sense.ontolex:LexicalSense};
+  \node[note, anchor=west] at (8.0,1.15) {ontolex:LexicalEntry $\sqsubseteq$ ${=}1\,$ontolex:canonicalForm\\ontolex:LexicalSense $\sqsubseteq$ ${=}1\,$ontolex:isLexicalizedSenseOf};
+  % subclass links, from the subclass to the superclass
+  \draw[sub] (concept) -- (lexc);
+  \draw[sub] (lexc) -- (skos);
+  \draw[sub] (topic) -- (skos);
+  \draw[sub] (level) -- (skos);
+  \draw[inferred] (poly) -- (entry);
 \end{tikzpicture}%
 }
+
+\medskip
+{\sffamily\scriptsize\setlength{\tabcolsep}{4pt}
+\begin{tabular*}{\linewidth}{@{}lll@{\extracolsep{\fill}}l@{\extracolsep{0pt}\hspace{8pt}}ll@{}}
+\toprule
+(b) Property & Domain & Range & Property & Domain & Range \\
+\midrule
+\texttt{ontolex:sense} & LexicalEntry & LexicalSense & \texttt{level} & LexicalSense & ProficiencyLevel \\
+\texttt{ontolex:evokes} & LexicalEntry & LexicalConcept & \texttt{register} & LexicalSense & Register \\
+\texttt{ontolex:isLexicalizedSenseOf} & LexicalSense & LexicalConcept & \texttt{hasExample} & LexicalSense & UsageExample \\
+\texttt{ontolex:canonicalForm} & LexicalEntry & Form & \texttt{hasCharacter} & Form & HanCharacter \\
+\texttt{confusableWith} & LexicalEntry & LexicalEntry & \texttt{hasRadical} & HanCharacter & Radical \\
+\texttt{inDomain} & Concept & ThematicDomain & \texttt{similarCharacter} & HanCharacter & HanCharacter \\
+\texttt{antonym}, \texttt{partMeronym} & Concept & Concept & \texttt{lexinfo:partOfSpeech} & & PartOfSpeech \\
+\bottomrule
+\end{tabular*}}
