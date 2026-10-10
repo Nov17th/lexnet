@@ -13,6 +13,7 @@ import type {
 import {
   EntityLink,
   ErrorBox,
+  Label,
   Literals,
   Loading,
   WordLink,
@@ -70,10 +71,15 @@ function Audio({ id, revision }: { id: string; revision: number }) {
 export function ConceptContent({
   concept: c,
   excludeDefinition,
+  inSense,
 }: {
   concept: Concept;
   excludeDefinition?: LiteralValue;
+  /** Inside a sense card the translations below already show the concept's names. */
+  inSense?: boolean;
 }) {
+  // On a concept page the sections sit under the h1; in a sense card, under the sense's h2.
+  const h = inSense ? 3 : 2;
   const definitions = c.definitions.filter(
     (d) =>
       d.value !== excludeDefinition?.value ||
@@ -81,16 +87,18 @@ export function ConceptContent({
   );
   return (
     <>
-      <div className="concept-labels">
-        <Literals values={c.labels} />
-      </div>
+      {!inSense && (
+        <div className="concept-labels">
+          <Literals values={c.labels} />
+        </div>
+      )}
       {definitions.length > 0 && (
         <div className="definitions">
           <Literals values={definitions} />
         </div>
       )}
-      <h4>Translations &amp; synonyms</h4>
-      <WordList words={c.words} />
+      <Label level={h}>Translations &amp; synonyms</Label>
+      <WordList words={c.words} level={h === 2 ? 3 : 4} />
       {c.topics.length > 0 && (
         <div className="topic-line">
           <span className="muted">Topics</span>
@@ -114,9 +122,9 @@ export function ConceptContent({
               return (
                 <div key={kind}>
                   {/* Headings are the ontology labels; skos:broader has no inverse property in the data, so its other direction keeps the SKOS name. */}
-                  <h4>
+                  <Label level={h}>
                     {kind === "Hyponyms" ? "narrower" : rs[0].predicateLabel}
-                  </h4>
+                  </Label>
                   <div className="chips">
                     {rs.map((r) => (
                       <EntityLink key={r.iri} entity={r} note={r.definition} />
@@ -169,10 +177,9 @@ export function SenseCard({
           )}
         </div>
       </div>
-      <ConceptContent concept={s.concept} excludeDefinition={definition} />
       {s.examples.length > 0 && (
         <div className="examples">
-          <h4>Examples</h4>
+          <Label level={3}>Examples</Label>
           {s.examples.map((e, i) => (
             <blockquote key={i} lang={e.language}>
               {e.value}
@@ -180,15 +187,23 @@ export function SenseCard({
           ))}
         </div>
       )}
+      <ConceptContent
+        concept={s.concept}
+        excludeDefinition={definition}
+        inSense
+      />
     </article>
   );
 }
 export function CharacterDetails({
   id,
   close,
+  standalone,
 }: {
   id: string;
   close?: () => void;
+  /** On its own page the panel title is the page heading. */
+  standalone?: boolean;
 }) {
   const [page, setPage] = useState(1);
   const [revision, setRevision] = useState(0);
@@ -197,10 +212,11 @@ export function CharacterDetails({
     revision,
   );
   const c = result.data;
+  const h = standalone ? 2 : 3;
   return (
     <section className="character-panel" aria-label="Character details">
       <div className="section-heading">
-        <h2>Han character</h2>
+        {standalone ? <h1>Han character</h1> : <h2>Han character</h2>}
         {close && (
           <button className="button secondary" onClick={close}>
             Close
@@ -227,7 +243,7 @@ export function CharacterDetails({
               <Literals values={c.definitions} />
             </div>
           </div>
-          <h4>All recorded readings</h4>
+          <Label level={h}>All recorded readings</Label>
           <div className="chips">
             {c.readings.map((r) => (
               <span className="badge" key={r}>
@@ -239,7 +255,7 @@ export function CharacterDetails({
             Common reading: {c.commonReadings.join(" · ") || "Not recorded"} · A
             character reading can vary by word.
           </p>
-          <h4>Radicals</h4>
+          <Label level={h}>Radical</Label>
           {c.radicals.map((r) => (
             <div className="radical" key={r.iri}>
               <strong>{r.label}</strong>
@@ -252,7 +268,7 @@ export function CharacterDetails({
               <Literals values={r.definitions} />
             </div>
           ))}
-          <h4>{c.similarLabel}</h4>
+          <Label level={h}>{c.similarLabel}</Label>
           <div className="chips">
             {c.similar.length ? (
               c.similar.map((s) => (
@@ -268,13 +284,13 @@ export function CharacterDetails({
               <span className="muted">None recorded</span>
             )}
           </div>
-          <h4>Words containing {c.label}</h4>
+          <Label level={h}>Words containing {c.label}</Label>
           <div className="chips">
             {c.words.map((w) => (
               <WordLink key={w.iri} word={w} />
             ))}
           </div>
-          <h4>Characters sharing a radical</h4>
+          <Label level={h}>Characters sharing a radical</Label>
           <div className="chips">
             {c.radicalPeers.map((s) => (
               <Link
@@ -286,23 +302,25 @@ export function CharacterDetails({
               </Link>
             ))}
           </div>
-          <div className="pagination">
-            <button
-              className="button secondary"
-              disabled={page === 1}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              Previous
-            </button>
-            <span>Page {page}</span>
-            <button
-              className="button secondary"
-              disabled={!c.hasMore}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </button>
-          </div>
+          {(page > 1 || c.hasMore) && (
+            <div className="pagination">
+              <button
+                className="button secondary"
+                disabled={page === 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                Previous
+              </button>
+              <span>Page {page}</span>
+              <button
+                className="button secondary"
+                disabled={!c.hasMore}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </>
       )}
     </section>
@@ -332,7 +350,7 @@ export default function EntryDetails({
   if (mode === "character")
     return (
       <div className="page">
-        <CharacterDetails key={id} id={id} />
+        <CharacterDetails key={id} id={id} standalone />
       </div>
     );
   const data = result.data;
@@ -400,12 +418,12 @@ export default function EntryDetails({
                   {[...new Set(e.confusables.map((c) => c.predicate))].map(
                     (p) => (
                       <div className="confusable-group" key={p}>
-                        <h4>
+                        <Label level={3}>
                           {
                             e.confusables.find((c) => c.predicate === p)
                               ?.predicateLabel
                           }
-                        </h4>
+                        </Label>
                         <div className="chips">
                           {e.confusables
                             .filter((c) => c.predicate === p)
@@ -418,7 +436,7 @@ export default function EntryDetails({
                   )}
                   {e.lookAlikes.length > 0 && (
                     <div className="confusable-group">
-                      <h4>{e.lookAlikeLabel}</h4>
+                      <Label level={3}>{e.lookAlikeLabel}</Label>
                       <div className="chips">
                         {e.lookAlikes.map((a) => (
                           <Link

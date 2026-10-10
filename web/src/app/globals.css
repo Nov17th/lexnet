@@ -76,7 +76,8 @@ h2 {
 h3 {
   font-weight: 600;
 }
-h4 {
+h4,
+.label-heading {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -1265,7 +1266,7 @@ td strong {
   .language-grid {
     grid-template-columns: 1fr;
   }
-  .language-grid h4 {
+  .language-grid .label-heading {
     margin-top: 13px;
   }
   .relationships {

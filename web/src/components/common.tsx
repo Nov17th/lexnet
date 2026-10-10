@@ -118,12 +118,29 @@ export function WordLink({ word }: { word: Word }) {
     </Link>
   );
 }
-export function WordList({ words }: { words: Word[] }) {
+/** Small uppercase heading; the level keeps the page outline in order (h1, h2, h3…). */
+export function Label({
+  level,
+  children,
+}: {
+  level: 2 | 3 | 4;
+  children: React.ReactNode;
+}) {
+  const Tag = (["h2", "h3", "h4"] as const)[level - 2];
+  return <Tag className="label-heading">{children}</Tag>;
+}
+export function WordList({
+  words,
+  level = 4,
+}: {
+  words: Word[];
+  level?: 2 | 3 | 4;
+}) {
   return (
     <div className="language-grid">
       {["en", "vi", "zh"].map((language) => (
         <div key={language}>
-          <h4>{languageName(language)}</h4>
+          <Label level={level}>{languageName(language)}</Label>
           <div className="chips">
             {words
               .filter((w) => w.language === language)
