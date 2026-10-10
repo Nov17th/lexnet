@@ -2,15 +2,14 @@
 
 A read-only dictionary and graph explorer for the LexNet English, Vietnamese and Chinese knowledge graph. The browser calls the Next.js API, which queries a Fuseki SPARQL endpoint at runtime.
 
-
 ## Features
 
-- Search words, inspect senses, translations, synonyms, proficiency levels and examples.
-- Explore semantic relations, confusable words, Han characters and radicals.
+- Search words in any letter case, inspect senses, translations, synonyms, proficiency levels and examples. Search results and confusable words show their English meaning, so words with the same spelling can be told apart.
+- Explore semantic relations, confusable words, look-alike characters, Han characters and radicals. Relation and confusion headings use the ontology's `rdfs:label`.
 - Browse topics and filter senses by language and proficiency rank.
-- View dataset counts, coverage, bounded graph neighborhoods and results derived by SPARQL.
-- Run SELECT, ASK, CONSTRUCT and DESCRIBE queries in the SPARQL console. Updates are rejected by both the app and the supplied Fuseki launcher.
-- Retrieve pronunciation audio on demand from linked Wikidata lexemes, with pronunciation-variety labels when supplied and American English listed first. This uses a separate Wikidata request; local dictionary queries do not depend on Wikidata availability.
+- View dataset counts, coverage, bounded graph neighborhoods with their Wikidata links, and results derived by SPARQL.
+- Run SELECT, ASK, CONSTRUCT and DESCRIBE queries in the SPARQL console. Standard prefixes (`lexnet:`, `ontolex:`, `concept:`…) are added when a query uses them without declaring them. Updates are rejected by both the app and the supplied Fuseki launcher.
+- Retrieve pronunciation audio on demand from linked Wikidata lexemes, including Chinese forms tagged `zh-hans` or `zh-hant`, with pronunciation-variety labels when supplied and American English listed first. This uses a separate Wikidata request; local dictionary queries do not depend on Wikidata availability.
 
 ## Requirements
 
@@ -90,7 +89,7 @@ With the web application and Fuseki running, use `npm run test:integration`. The
 
 External audio availability depends on Wikidata and Wikimedia. Browser layout, keyboard interaction, graph controls and actual audio playback should also be checked manually before recording a demo.
 
-Verified in this repository layout: lint, production build, TypeScript, 13 tests and 20 integration groups passed. This includes graph sense labels, character meanings, pronunciation-variety ordering, query-file reloads, all 18 sample-query syntaxes and execution of the 15 local samples through the console API. Development startup and search also passed. The runtime dependency audit reported no vulnerabilities; the full audit reported five high findings in development lint dependencies.
+Verified in this repository layout: lint, production build, TypeScript, 15 tests and 20 integration groups passed. This includes graph sense labels, character meanings, pronunciation-variety ordering, query-file reloads, all 18 sample-query syntaxes and execution of the 15 local samples through the console API. Development startup and search also passed. The runtime dependency audit reported no vulnerabilities; the full audit reported five high findings in development lint dependencies.
 
 ## Source layout
 
