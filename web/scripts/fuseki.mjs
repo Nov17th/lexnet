@@ -34,9 +34,7 @@ if (!existsSync(jar)) {
   );
   process.exit(1);
 }
-const rdf = resolve(
-  process.env.LEXNET_RDF_FILE || "../build/lexnet-full.ttl",
-);
+const rdf = resolve(process.env.LEXNET_RDF_FILE || "../build/lexnet-full.ttl");
 if (!existsSync(rdf)) {
   console.error(
     `RDF file not found: ${rdf}. Run from web/ and check ../build/lexnet-full.ttl or set LEXNET_RDF_FILE. See README.md.`,

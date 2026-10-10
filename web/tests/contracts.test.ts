@@ -248,7 +248,7 @@ test("audio adapter selects exact lexical form, preserves MIME, deduplicates and
       "zh",
     ).length,
     1,
-  );  
+  );
 });
 
 test("audio labels use pronunciation qualifiers, prefer American English and upgrade duplicate unqualified rows", () => {
