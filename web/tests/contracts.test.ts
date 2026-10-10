@@ -193,6 +193,20 @@ test("audio adapter selects exact lexical form, preserves MIME, deduplicates and
     )[0].mime,
     "audio/wav",
   );
+  assert.equal(
+    selectAudioCandidates(
+      [
+        row(
+          "苹果",
+          "http://commons.wikimedia.org/wiki/Special:FilePath/Zh-pingguo.ogg",
+          "zh-hans",
+        ),
+      ],
+      "苹果",
+      "zh",
+    ).length,
+    1,
+  );  
 });
 
 test("audio labels use pronunciation qualifiers, prefer American English and upgrade duplicate unqualified rows", () => {

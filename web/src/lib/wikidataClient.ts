@@ -17,7 +17,9 @@ export function selectAudioCandidates(
       (language === "en" ? written.toLowerCase() : written)
     )
       continue;
-    if (r.representation["xml:lang"] !== language) continue;
+    // Wikidata tags Chinese forms zh-hans, zh-hant and so on, so "zh" must match its subtags
+    const tag = (r.representation["xml:lang"] || "").toLowerCase();
+    if (tag !== language && !tag.startsWith(`${language}-`)) continue;
     let audioUrl: URL;
     try {
       audioUrl = new URL(r.audio.value);
@@ -98,7 +100,7 @@ export async function audio(id: string): Promise<AudioResult> {
   const request = (async () => {
     let result: AudioResult;
     try {
-      const query = `PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#> PREFIX p: <http://www.wikidata.org/prop/> PREFIX ps: <http://www.wikidata.org/prop/statement/> PREFIX pq: <http://www.wikidata.org/prop/qualifier/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX wikibase: <http://wikiba.se/ontology#> SELECT DISTINCT ?lexeme ?representation ?audio ?varietyLabel WHERE { VALUES ?lexeme { ${lexemes.map((l) => `<${l.replace("https:", "http:")}>`).join(" ")} } ?lexeme ontolex:lexicalForm ?form . ?form ontolex:representation ?representation ; p:P443 ?statement . ?statement ps:P443 ?audio . FILTER NOT EXISTS { ?statement wikibase:rank wikibase:DeprecatedRank } OPTIONAL { ?statement pq:P5237 ?variety . ?variety rdfs:label ?varietyLabel . FILTER(LANG(?varietyLabel)="en") } FILTER(LANG(?representation)=${literal(e.language)}) }`;
+      const query = `PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#> PREFIX p: <http://www.wikidata.org/prop/> PREFIX ps: <http://www.wikidata.org/prop/statement/> PREFIX pq: <http://www.wikidata.org/prop/qualifier/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX wikibase: <http://wikiba.se/ontology#> SELECT DISTINCT ?lexeme ?representation ?audio ?varietyLabel WHERE { VALUES ?lexeme { ${lexemes.map((l) => `<${l.replace("https:", "http:")}>`).join(" ")} } ?lexeme ontolex:lexicalForm ?form . ?form ontolex:representation ?representation ; p:P443 ?statement . ?statement ps:P443 ?audio . FILTER NOT EXISTS { ?statement wikibase:rank wikibase:DeprecatedRank } OPTIONAL { ?statement pq:P5237 ?variety . ?variety rdfs:label ?varietyLabel . FILTER(LANG(?varietyLabel)="en") } FILTER(LANGMATCHES(LANG(?representation), ${literal(e.language)})) }`;
       const response = await fetch(
         process.env.WIKIDATA_ENDPOINT || "https://query.wikidata.org/sparql",
         {
